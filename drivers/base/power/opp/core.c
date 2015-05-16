@@ -987,6 +987,10 @@ static int _opp_add(struct device *dev, struct dev_pm_opp *new_opp,
 		if (new_opp->rate < opp->rate)
 			break;
 
+		/* new_opp is the largest */
+		if (&opp->node == &dev_opp->opp_list)
+			break;
+
 		/* Duplicate OPPs */
 		dev_warn(dev, "%s: duplicate OPPs detected. Existing: freq: %lu, volt: %lu, enabled: %d. New: freq: %lu, volt: %lu, enabled: %d\n",
 			 __func__, opp->rate, opp->u_volt, opp->available,
