@@ -22,7 +22,7 @@ ui_print " - mounting data partition"
 mount /data
 
 ui_print " - flashing boot.img"
-cat boot.img > /dev/block/bootdevice/by-name/boot
+cat boot.img /dev/zero > /dev/block/bootdevice/by-name/boot 2>/dev/null
 
 ui_print " - tuning file systems"
 fstrim -v /system > /dev/null 2>&1

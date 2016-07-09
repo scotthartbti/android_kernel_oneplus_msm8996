@@ -16,7 +16,7 @@ unzip -o "$ZIP"
 
 ui_print " ";
 ui_print " - flashing recovery"
-cat recovery.img > /dev/block/bootdevice/by-name/recovery
+cat recovery.img /dev/zero > /dev/block/bootdevice/by-name/recovery 2>/dev/null
 
 ui_print " "
 ui_print "finished"

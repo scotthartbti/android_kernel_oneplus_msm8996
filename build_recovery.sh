@@ -51,9 +51,6 @@ if [[ $GENERATED_SIZE -gt $PARTITION_SIZE ]]; then
 	echo "recovery.img size larger than partition size!" 1>&2
 	exit 1
 fi
-if echo "$@" | grep -q "CC=\$(CROSS_COMPILE)gcc" ; then
-	dd if=/dev/zero bs=$((${PARTITION_SIZE}-${GENERATED_SIZE})) count=1 >> recovery.img
-fi
 
 echo "done"
 ls -al recovery.img
