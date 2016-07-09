@@ -46,6 +46,12 @@ Module.symvers
 /vmlinuz
 /System.map
 /Module.markers
+/*.img
+/*.zip
+
+# ramfs
+!/ramdisk/**
+!/recovery/**
 
 #
 # Debian directory (make deb-pkg)
