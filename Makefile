@@ -407,7 +407,12 @@ KBUILD_CFLAGS   := -Werror -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 # arter97's optimizations
 KBUILD_CFLAGS	+= -pipe -mno-android -fno-pic -O2 -march=armv8-a+crc
 # GCC 6.1 is too strict
-KBUILD_CFLAGS	+= -Wno-error=misleading-indentation -Wno-error=tautological-compare -Wno-error=array-bounds -Wno-error=overflow
+KBUILD_CFLAGS	+= -Wno-error=misleading-indentation \
+		   -Wno-error=tautological-compare \
+		   -Wno-error=array-bounds \
+		   -Wno-error=memset-transposed-args \
+		   -Wno-error=bool-compare \
+		   -Wno-error=logical-not-parentheses
 # Other unnecessary warnings
 KBUILD_CFLAGS	+= -Wno-maybe-uninitialized		\
 		   -Wno-error=unused-but-set-parameter	\
