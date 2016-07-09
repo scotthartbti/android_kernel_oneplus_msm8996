@@ -114,5 +114,3 @@ on property:init.svc.recovery=running
 
 on property:dev.bootcomplete=1
     write /proc/sys/kernel/sched_boost 0
-
-    setprop sys.io.scheduler "bfq"
