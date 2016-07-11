@@ -45,7 +45,7 @@ cd $KERNELDIR
 
 echo "Making new boot image"
 gcc -w -s -pipe -O2 -Itools/libmincrypt -o tools/mkbootimg/mkbootimg tools/libmincrypt/*.c tools/mkbootimg/mkbootimg.c
-tools/mkbootimg/mkbootimg --kernel $KERNELDIR/arch/arm64/boot/Image.gz-dtb --ramdisk $RAMFS_TMP.cpio.gz --cmdline 'androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x237 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 cma=32M@0-0xffffffff' --base 0x80000000 --pagesize 4096 --ramdisk_offset 0x02200000 --tags_offset 0x02000000 --second_offset 0x00f00000 -o $KERNELDIR/boot.img
+tools/mkbootimg/mkbootimg --kernel $KERNELDIR/arch/arm64/boot/Image.gz-dtb --ramdisk $RAMFS_TMP.cpio.gz --cmdline 'androidboot.hardware=qcom user_debug=31 msm_rtb.filter=0x237 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 cma=32M@0-0xffffffff' --base 0x80000000 --pagesize 4096 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --second_offset 0x00f00000 -o $KERNELDIR/boot.img
 GENERATED_SIZE=$(stat -c %s boot.img)
 if [[ $GENERATED_SIZE -gt $PARTITION_SIZE ]]; then
 	echo "boot.img size larger than partition size!" 1>&2
