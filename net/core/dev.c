@@ -3416,8 +3416,10 @@ static int netif_rx_internal(struct sk_buff *skb)
 
 	trace_netif_rx(skb);
 #ifdef CONFIG_RPS
+#ifndef CONFIG_MACH_MSM8996_15801
 	WARN_ONCE(skb_cloned(skb), "Cloned packet from dev %s\n",
 		  skb->dev->name);
+#endif
 
 	if (static_key_false(&rps_needed)) {
 		struct rps_dev_flow voidflow, *rflow = &voidflow;
