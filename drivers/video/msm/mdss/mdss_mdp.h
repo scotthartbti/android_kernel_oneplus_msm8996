@@ -387,6 +387,8 @@ struct mdss_mdp_ctl {
 	u64 last_input_time;
 	int pending_mode_switch;
 	u16 frame_rate;
+
+	bool commit_in_progress;
 };
 
 struct mdss_mdp_mixer {
