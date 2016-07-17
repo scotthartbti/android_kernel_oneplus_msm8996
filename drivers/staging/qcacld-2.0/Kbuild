@@ -1443,6 +1443,10 @@ ifeq ($(call cc-option-yn, -Wmaybe-uninitialized),y)
 EXTRA_CFLAGS += -Wmaybe-uninitialized
 endif
 
+ifeq ($(call cc-option-yn, -Wmisleading-indentation),y)
+EXTRA_CFLAGS += -Wno-misleading-indentation
+endif
+
 # Module information used by KBuild framework
 obj-$(CONFIG_QCA_CLD_WLAN) += $(MODNAME).o
 $(MODNAME)-y := $(OBJS)
