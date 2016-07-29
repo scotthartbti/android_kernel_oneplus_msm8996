@@ -833,6 +833,8 @@
 /data/fpc(/.*)?                                                 u:object_r:fpc_data_file:s0
 /data/fpc_images(/.*)?                                          u:object_r:fpc_images_file:s0
 /sys/devices/soc/soc:fpc_fpc1020/irq                            u:object_r:sysfs_fpc_irq:s0
+
+/dev/dash                                                       u:object_r:input_device:s0
 #line 1 "vendor/cm/sepolicy/file_contexts"
 /cache/dalvik-cache(/.*)? u:object_r:dalvikcache_data_file:s0
 
@@ -891,10 +893,3 @@
 
 # bash
 /system/xbin/bash                               u:object_r:shell_exec:s0
-
-# emulated storage via sdcardfs
-/mnt/runtime/(default|read|write)/emulated/[0-9](/.*)?  u:object_r:media_rw_data_file:s0
-/storage/emulated/[0-9](/.*)?                           u:object_r:media_rw_data_file:s0
-/mnt/shell/emulated/([1-9])?[0-9](/.*)?                 u:object_r:media_rw_data_file:s0
-/data/media\.tmp(/.*)?                                  u:object_r:media_rw_data_file:s0
-

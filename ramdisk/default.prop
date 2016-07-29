@@ -15,7 +15,7 @@ debug.atrace.tags.enableflags=0
 #
 # BOOTIMAGE_BUILD_PROPERTIES
 #
-ro.bootimage.build.date=Wed Jul 27 16:37:55 KST 2016
-ro.bootimage.build.date.utc=1469605075
-ro.bootimage.build.fingerprint=OnePlus/OnePlus3/OnePlus3:6.0.1/MOB30R/bc051689e6:userdebug/test-keys
+ro.bootimage.build.date=Fri Jul 29 16:16:31 KST 2016
+ro.bootimage.build.date.utc=1469776591
+ro.bootimage.build.fingerprint=OnePlus/OnePlus3/OnePlus3:6.0.1/MOB30R/718662c97b:userdebug/test-keys
 persist.sys.usb.config=adb
