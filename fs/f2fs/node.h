@@ -15,9 +15,10 @@
 #define	NAT_BLOCK_OFFSET(start_nid) (start_nid / NAT_ENTRY_PER_BLOCK)
 
 /* # of pages to perform synchronous readahead before building free nids */
-#define FREE_NID_PAGES 4
+#define FREE_NID_PAGES	8
+#define MAX_FREE_NIDS	(NAT_ENTRY_PER_BLOCK * FREE_NID_PAGES)
 
-#define DEF_RA_NID_PAGES	4	/* # of nid pages to be readaheaded */
+#define DEF_RA_NID_PAGES	0	/* # of nid pages to be readaheaded */
 
 /* maximum readahead size for node during getting data blocks */
 #define MAX_RA_NODE		128
@@ -28,7 +29,7 @@
 /* control dirty nats ratio threshold (default: 10% over max nid count) */
 #define DEF_DIRTY_NAT_RATIO_THRESHOLD		10
 /* control total # of nats */
-#define DEF_NAT_CACHE_THRESHOLD			50000
+#define DEF_NAT_CACHE_THRESHOLD			100000
 
 /* vector size for gang look-up from nat cache that consists of radix tree */
 #define NATVEC_SIZE	64
