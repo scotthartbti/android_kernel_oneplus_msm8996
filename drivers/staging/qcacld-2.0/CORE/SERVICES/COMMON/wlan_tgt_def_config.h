@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2011, 2014-2015 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -19,29 +19,27 @@
  * PERFORMANCE OF THIS SOFTWARE.
  */
 
+/*
+ * This file was originally distributed by Qualcomm Atheros, Inc.
+ * under proprietary terms before Copyright ownership was assigned
+ * to the Linux Foundation.
+ */
 
 #ifndef __WLAN_TGT_DEF_CONFIG_H__
 #define __WLAN_TGT_DEF_CONFIG_H__
 
 /*
- * TODO: please help to consider if we need a seperate config file from LL case.
- */
-
-/*
  * set of default target config , that can be over written by platform
  */
 
-#ifdef QCA_SUPPORT_INTEGRATED_SOC
-#define CFG_TGT_NUM_VDEV                3 /*STA, P2P device, P2P GO/Cli*/
-#else
 /*
- * default limit of VAPs per device.
+ * default limit of 8 VAPs per device.
  */
+/* Rome PRD support 3 vdevs */
 #define CFG_TGT_NUM_VDEV                3
-#endif
+
 /*
- * We would need 1 AST entry per peer. Scale it by a factor of 2 to minimize
- * hash collisions.
+ * We would need 1 AST entry per peer. Scale it by a factor of 2 to minimize hash collisions.
  * TODO: This scaling factor would be taken care inside the WAL in the future.
  */
 #define CFG_TGT_NUM_PEER_AST            2
@@ -63,90 +61,61 @@
  * probably always be appropriate; it is probably not necessary to
  * determine this value dynamically.
  */
-#define CFG_TGT_AST_SKID_LIMIT          6
+#define CFG_TGT_AST_SKID_LIMIT          16
+
 /*
  * total number of peers per device.
- * currently set to 8 to bring up IP3.9 for memory size problem
  */
-#define CFG_TGT_NUM_PEERS               8
-/*
- *  max number of peers per device.
- */
-#define CFG_TGT_NUM_PEERS_MAX           8
+#define CFG_TGT_NUM_PEERS               14
+
 /*
  * In offload mode target supports features like WOW, chatter and other
  * protocol offloads. In order to support them some functionalities like
  * reorder buffering, PN checking need to be done in target. This determines
  * maximum number of peers suported by target in offload mode
  */
-#define CFG_TGT_NUM_OFFLOAD_PEERS       0
+
+/*
+ * The current firmware implementation requires the number of offload peers
+ * should be (number of vdevs + 1).
+
+ * The reason for this is the firmware clubbed the self peer and offload peer
+ * in the same pool. So if the firmware wanted to support n vdevs then the
+ * number of offload peer must be n+1 of which n buffers will be used for
+ * self peer and the remaining 1 is used for offload peer to support chatter
+ * mode for single STA.
+
+ * Technically the macro should be 1 however the current firmware requires n+1.
+
+ * TODO: This MACRO need to be modified in the future, if the firmware modified
+ * to allocate buffers for self peer and offload peer independently.
+ */
+
+#define CFG_TGT_NUM_OFFLOAD_PEERS       (CFG_TGT_NUM_VDEV+1)
+
 /*
  * Number of reorder buffers used in offload mode
  */
-#define CFG_TGT_NUM_OFFLOAD_REORDER_BUFFS   0
+#define CFG_TGT_NUM_OFFLOAD_REORDER_BUFFS   4
+
 /*
  * keys per peer node
  */
 #define CFG_TGT_NUM_PEER_KEYS           2
 /*
- * total number of TX/RX data TIDs
+ * total number of data TX and RX TIDs
  */
-#define CFG_TGT_NUM_TIDS                (2 * (CFG_TGT_NUM_PEERS + CFG_TGT_NUM_VDEV))
-/*
- * max number of Tx TIDS
- */
-#define CFG_TGT_NUM_TIDS_MAX            (2 * (CFG_TGT_NUM_PEERS_MAX + CFG_TGT_NUM_VDEV))
-/*
- * number of multicast keys.
- */
-#define CFG_TGT_NUM_MCAST_KEYS          8
-/*
- * A value of 3 would probably suffice - one for the control stack, one for
- * the data stack, and one for debugging.
- * This value may need to be fine tuned, but a constant value will
- * probably always be appropriate; it is probably not necessary to
- * determine this value dynamically.
- */
-#define CFG_TGT_NUM_PDEV_HANDLERS       8
-/*
- * A value of 3 would probably suffice - one for the control stack, one for
- * the data stack, and one for debugging.
- * This value may need to be fine tuned, but a constant value will
- * probably always be appropriate; it is probably not necessary to
- * determine this value dynamically.
- */
-#define CFG_TGT_NUM_VDEV_HANDLERS       4
-/*
- * set this to 8:
- *     one for WAL interals (connection pause)
- *     one for the control stack,
- *     one for the data stack
- *     and one for debugging
- * This value may need to be fine tuned, but a constant value will
- * probably always be appropriate; it is probably not necessary to
- * determine this value dynamically.
- */
-#define CFG_TGT_NUM_HANDLERS            14
-/*
- * set this to 3: one for the control stack, one for
- * the data stack, and one for debugging.
- * This value may need to be fine tuned, but a constant value will
- * probably always be appropriate; it is probably not necessary to
- * determine this value dynamically.
- */
-#define CFG_TGT_NUM_PEER_HANDLERS       32
+#define CFG_TGT_NUM_TIDS       (2 * (CFG_TGT_NUM_PEERS + CFG_TGT_NUM_VDEV + 2))
 /*
  * set this to 0x7 (Peregrine = 3 chains).
  * need to be set dynamically based on the HW capability.
- * this is rome
  */
-#define CFG_TGT_DEFAULT_TX_CHAIN_MASK   0x3
+#define CFG_TGT_DEFAULT_TX_CHAIN_MASK   0x7
 /*
  * set this to 0x7 (Peregrine = 3 chains).
  * need to be set dynamically based on the HW capability.
- * this is rome
  */
-#define CFG_TGT_DEFAULT_RX_CHAIN_MASK   0x3
+#define CFG_TGT_DEFAULT_RX_CHAIN_MASK   0x7
 /* 100 ms for video, best-effort, and background */
 #define CFG_TGT_RX_TIMEOUT_LO_PRI       100
 /* 40 ms for voice*/
@@ -160,9 +129,6 @@
 /* maximum number of pending scan requests */
 #define CFG_TGT_DEFAULT_SCAN_MAX_REQS   0x4
 
-/* maximum number of scan event handlers */
-#define CFG_TGT_DEFAULT_SCAN_MAX_HANDLERS   0x4
-
 /* maximum number of VDEV that could use BMISS offload */
 #define CFG_TGT_DEFAULT_BMISS_OFFLOAD_MAX_VDEV   0x2
 
@@ -174,8 +140,9 @@
 
 /* maximum number of VDEV offload GTK to support */
 #define CFG_TGT_DEFAULT_GTK_OFFLOAD_MAX_VDEV   0x2
-/* default: mcast->ucast disabled */
-#if 1
+
+/* default: mcast->ucast disabled if ATH_SUPPORT_MCAST2UCAST not defined */
+#ifndef ATH_SUPPORT_MCAST2UCAST
 #define CFG_TGT_DEFAULT_NUM_MCAST_GROUPS 0
 #define CFG_TGT_DEFAULT_NUM_MCAST_TABLE_ELEMS 0
 #define CFG_TGT_DEFAULT_MCAST2UCAST_MODE 0 /* disabled */
@@ -183,9 +150,10 @@
 /* (for testing) small multicast group membership table enabled */
 #define CFG_TGT_DEFAULT_NUM_MCAST_GROUPS 4
 #define CFG_TGT_DEFAULT_NUM_MCAST_TABLE_ELEMS 16
-#define CFG_TGT_DEFAULT_MCAST2UCAST_MODE 1
+#define CFG_TGT_DEFAULT_MCAST2UCAST_MODE 2
 #endif
 
+#define CFG_TGT_MAX_MULTICAST_FILTER_ENTRIES 16
 /*
  * Specify how much memory the target should allocate for a debug log of
  * tx PPDU meta-information (how large the PPDU was, when it was sent,
@@ -200,6 +168,7 @@
 
 /* target based fragment timeout and MPDU duplicate detection */
 #define CFG_TGT_DEFAULT_RX_SKIP_DEFRAG_TIMEOUT_DUP_DETECTION_CHECK 0
+
 /*  Default VoW configuration
  */
 #define CFG_TGT_DEFAULT_VOW_CONFIG   0
@@ -207,15 +176,17 @@
 /*
  * total number of descriptors to use in the target
  */
-#ifndef HIF_SDIO
-#define CFG_TGT_NUM_MSDU_DESC    (32)
-#else
-#define CFG_TGT_NUM_MSDU_DESC    (0)
-#endif
+#define CFG_TGT_NUM_MSDU_DESC    (1024 + 32)
+
 /*
  * Maximum number of frag table entries
  */
-#define CFG_TGT_MAX_FRAG_TABLE_ENTRIES 2
+#define CFG_TGT_MAX_FRAG_TABLE_ENTRIES 10
+
+/*
+ * Maximum number of VDEV that beacon tx offload will support
+ */
+#define CFG_TGT_DEFAULT_BEACON_TX_OFFLOAD_MAX_VDEV 2
 
 /*
  * number of vdevs that can support tdls
@@ -226,6 +197,7 @@
  * number of peers that each Tdls vdev can track
  */
 #define CFG_TGT_NUM_TDLS_CONN_TABLE_ENTRIES    32
+
 /*
  * number of TDLS concurrent sleep STAs
  */
@@ -236,44 +208,34 @@
  */
 #define CFG_TGT_NUM_TDLS_CONC_BUFFER_STAS    1
 
-#define CFG_TGT_MAX_MULTICAST_FILTER_ENTRIES 5
-/*
- * Maximum number of VDEV that beacon tx offload will support
- */
-#ifdef HIF_SDIO
-#define CFG_TGT_DEFAULT_BEACON_TX_OFFLOAD_MAX_VDEV 2
-#else
-#define CFG_TGT_DEFAULT_BEACON_TX_OFFLOAD_MAX_VDEV 1
-#endif
-
 /*
  * ht enable highest MCS by default
  */
-#define CFG_TGT_DEFAULT_GTX_HT_MASK     0x8080
+#define CFG_TGT_DEFAULT_GTX_HT_MASK		0x8080
 /*
  * vht enable highest MCS by default
  */
-#define CFG_TGT_DEFAULT_GTX_VHT_MASK        0x80200
+#define CFG_TGT_DEFAULT_GTX_VHT_MASK		0x80200
 /*
  * threshold to enable GTX
  */
-#define CFG_TGT_DEFAULT_GTX_PER_THRESHOLD   3
+#define CFG_TGT_DEFAULT_GTX_PER_THRESHOLD	3
 /*
  * margin to move back when per > margin + threshold
  */
-#define CFG_TGT_DEFAULT_GTX_PER_MARGIN      2
+#define CFG_TGT_DEFAULT_GTX_PER_MARGIN		2
 /*
  * step for every move
  */
-#define CFG_TGT_DEFAULT_GTX_TPC_STEP        1
+#define CFG_TGT_DEFAULT_GTX_TPC_STEP		1
 /*
  * lowest TPC
  */
-#define CFG_TGT_DEFAULT_GTX_TPC_MIN     0
+#define CFG_TGT_DEFAULT_GTX_TPC_MIN		0
 /*
  * enable all BW 20/40/80/160
  */
-#define CFG_TGT_DEFAULT_GTX_BW_MASK     0xf
+#define CFG_TGT_DEFAULT_GTX_BW_MASK		0xf
 
 /*
  * number of vdevs that can support OCB
