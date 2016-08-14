@@ -10,6 +10,7 @@ EOF
 
 case "$1" in
   backup)
+    mv /dev/block/bootdevice/by-name/boot /dev/block/bootdevice/by-name/boot.bak
     list_files | while read FILE DUMMY; do
       backup_file $S/"$FILE"
     done

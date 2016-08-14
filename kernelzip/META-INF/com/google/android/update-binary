@@ -22,6 +22,7 @@ ui_print " - mounting data partition"
 mount /data
 
 ui_print " - flashing boot.img"
+mv /dev/block/bootdevice/by-name/boot.bak /dev/block/bootdevice/by-name/boot 2>/dev/null
 cat boot.img /dev/zero > /dev/block/bootdevice/by-name/boot 2>/dev/null
 
 ui_print " - installing files"
