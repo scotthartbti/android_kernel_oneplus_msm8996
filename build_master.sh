@@ -11,10 +11,10 @@ if [ -e boot.img ] ; then
 	tail -n $(($(cat ramdisk/default.prop | wc -l) - $(grep -n "START OVERRIDE" ramdisk/default.prop | cut -d : -f 1) + 1)) ramdisk/default.prop > kernelzip/kernel.prop
 	cd kernelzip/
 	7z a -mx9 arter97-kernel-"$(cat ../version)"-tmp.zip *
-	zipalign -v 4 arter97-kernel-"$(cat ../version)"-tmp.zip ../arter97-kernel-"$(cat ../version)".zip
+	zipalign -v 4 arter97-kernel-"$(cat ../version)"-tmp.zip ../arter97-kernel-"$(cat ../version)"-"$(date +%F | sed s@-@@g)".zip
 	rm arter97-kernel-"$(cat ../version)"-tmp.zip
 	cd ..
-	ls -al arter97-kernel-"$(cat version)".zip
+	ls -al arter97-kernel-"$(cat version)"-"$(date +%F | sed s@-@@g)".zip
 	rm kernelzip/boot.img kernelzip/kernel.prop
 fi
 
