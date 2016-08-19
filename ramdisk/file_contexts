@@ -851,6 +851,8 @@
 /sys/devices/soc/soc:fpc_fpc1020/irq                            u:object_r:sysfs_fpc_irq:s0
 
 /dev/dash                                                       u:object_r:input_device:s0
+
+/system/bin/ifaadaemon                                          u:object_r:ifaadaemon_exec:s0
 #line 1 "vendor/cm/sepolicy/file_contexts"
 /cache/dalvik-cache(/.*)? u:object_r:dalvikcache_data_file:s0
 

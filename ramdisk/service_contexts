@@ -222,6 +222,8 @@ com.qualcomm.qti.qseeproxysample               u:object_r:qseeproxysample_servic
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 android.apps.IQvopService             u:object_r:iqvop_service:s0
+#line 1 "device/oneplus/oneplus3/sepolicy/service_contexts"
+ifaadaemon                           u:object_r:ifaadaemon_service:s0
 #line 1 "vendor/cm/sepolicy/service_contexts"
 edgegestureservice                        u:object_r:edge_gesture_service:s0
 themes                                    u:object_r:themes_service:s0
