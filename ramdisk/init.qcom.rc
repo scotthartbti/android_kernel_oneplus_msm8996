@@ -287,6 +287,14 @@ on boot
     # Set default_pwrlevel
     write /sys/class/kgsl/kgsl-3d0/default_pwrlevel 6
 
+    # Don't reset entire SoC on individual subsystem crash
+    write /sys/bus/msm_subsys/devices/subsys0/restart_level "related"
+    write /sys/bus/msm_subsys/devices/subsys1/restart_level "related"
+    write /sys/bus/msm_subsys/devices/subsys2/restart_level "related"
+    write /sys/bus/msm_subsys/devices/subsys3/restart_level "related"
+    write /sys/bus/msm_subsys/devices/subsys4/restart_level "related"
+    write /sys/bus/msm_subsys/devices/subsys5/restart_level "related"
+
 # msm specific files that need to be created on /data
 on post-fs-data
     mkdir /data/tombstones 0771 system system
@@ -525,14 +533,6 @@ service secotad /system/bin/secotad
    class late_start
    user system
    group system
-
-service thermal-engine /system/vendor/bin/thermal-engine
-   class main
-   user root
-   socket thermal-send-client stream 0666 system system
-   socket thermal-recv-client stream 0660 system system
-   socket thermal-recv-passive-client stream 0666 system system
-   group root
 
 service time_daemon /system/bin/time_daemon
    class late_start
@@ -1337,16 +1337,18 @@ on property:sys.rainbow.recovery=0
 
 # happy dance!
 on post-fs-data
-    write /sys/class/leds/rgb/rgb_blink 0
-    write /sys/class/leds/blue/blink 0
-    write /sys/class/leds/red/blink 0
-    write /sys/class/leds/rgb/rgb_blink 0
-    write /sys/class/leds/blue/brightness 255
-    write /sys/class/leds/green/brightness 255
     write /sys/class/leds/red/brightness 0
+    write /sys/class/leds/red/blink 0
+    write /sys/class/leds/green/brightness 0
+    write /sys/class/leds/green/blink 0
+    write /sys/class/leds/blue/brightness 0
+    write /sys/class/leds/blue/blink 0
+    write /sys/class/leds/rgb/rgb_blink 0
     write /sys/class/leds/green/start_idx 0
     write /sys/class/leds/green/pause_hi 0
     write /sys/class/leds/green/pause_lo 0
     write /sys/class/leds/green/ramp_step_ms 50
     write /sys/class/leds/green/duty_pcts "16,25,33,41,50,58,66,74,83,91,100"
+    write /sys/class/leds/green/brightness 255
+    write /sys/class/leds/blue/brightness 255
     write /sys/class/leds/green/blink 1
