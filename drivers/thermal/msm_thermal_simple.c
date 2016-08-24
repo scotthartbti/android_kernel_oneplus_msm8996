@@ -33,7 +33,7 @@
 #define LITTLE_CPU_ID	0
 #define BIG_CPU_ID	2
 
-#define DEFAULT_SAMPLING_MS 3000
+#define DEFAULT_SAMPLING_MS 1000
 
 /* Sysfs attr group must be manually updated in order to change this */
 #define NR_THERMAL_ZONES 12
