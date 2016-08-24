@@ -249,7 +249,7 @@ SUBARCH := $(shell uname -m | sed -e s/i.86/x86/ -e s/x86_64/x86/ \
 # Default value for CROSS_COMPILE is not to prefix executables
 # Note: Some architectures assign CROSS_COMPILE in their arch/*/Makefile
 ARCH		?= arm64
-CROSS_COMPILE	?= /home/arter97/linaro-64/bin/aarch64-linux-android-
+CROSS_COMPILE	?= /home/arter97/gcc-6.2-64/bin/aarch64-none-elf-
 
 # Architecture as present in compile.h
 UTS_MACHINE 	:= $(ARCH)
@@ -405,7 +405,7 @@ KBUILD_CFLAGS   := -Werror -Wall -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -std=gnu89
 
 # arter97's optimizations
-KBUILD_CFLAGS	+= -pipe -mno-android -fno-pic -O2 -march=armv8-a+crc
+KBUILD_CFLAGS	+= -pipe -fno-pic -O2 -march=armv8-a+crc
 # GCC 6.1 is too strict
 KBUILD_CFLAGS	+= -Wno-error=misleading-indentation \
 		   -Wno-error=tautological-compare \
