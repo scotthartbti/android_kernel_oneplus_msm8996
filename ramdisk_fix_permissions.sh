@@ -8,6 +8,8 @@ chmod 644 default.prop
 chmod 771 data
 chmod 755 dev
 chmod 755 proc
+chmod 755 bin
+chmod 755 bin/*
 chmod 750 sbin
 chmod 750 sbin/*
 chmod 755 sys
