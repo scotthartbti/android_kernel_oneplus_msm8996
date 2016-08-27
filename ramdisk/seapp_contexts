@@ -22,6 +22,7 @@ user=_app seinfo=platform name=com.qualcomm.qct.dlt domain=location_app type=loc
 user=system seinfo=platform name=com.qualcomm.qti.auth.securesampleauthservice domain=qsee_svc_app type=qsee_svc_app_data_file
 user=system seinfo=platform name=com.qualcomm.qti.auth.secureextauthservice domain=qsee_svc_app type=qsee_svc_app_data_file
 user=_app seinfo=alipay name=com.eg.android.AlipayGphone* domain=alipay_app type=app_data_file
+user=_app seinfo=taobao name=com.taobao.taobao* domain=alipay_app type=app_data_file
 user=_app seinfo=platform name=com.cyanogenmod.filemanager domain=untrusted_app type=app_data_file
 user=theme_man domain=system_app type=system_data_file
 user=_app seinfo=cmupdater name=com.cyanogenmod.updater domain=system_app type=system_app_data_file
