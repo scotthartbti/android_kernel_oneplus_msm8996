@@ -2590,7 +2590,8 @@ error_led_register:
 		j = ARRAY_SIZE(qpnp_flash_led_attrs) - 1;
 		led_classdev_unregister(&led->flash_node[i].cdev);
 	}
-	debugfs_remove_recursive(root);
+	if (!IS_ERR_OR_NULL(root))
+		debugfs_remove_recursive(root);
 	mutex_destroy(&led->flash_led_lock);
 	destroy_workqueue(led->ordered_workq);
 
