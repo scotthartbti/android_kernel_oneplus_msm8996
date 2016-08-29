@@ -8026,13 +8026,15 @@ static int fg_probe(struct spmi_device *spmi)
 	 */
 	chip->batt_psy_name = "battery";
 
+#ifdef CONFIG_DEBUG_FS
 	if (chip->mem_base) {
 		rc = fg_dfs_create(chip);
 		if (rc < 0) {
 			pr_err("failed to create debugfs rc = %d\n", rc);
-			goto power_supply_unregister;
+			rc = 0;
 		}
 	}
+#endif
 
 	schedule_work(&chip->init_work);
 
@@ -8043,8 +8045,6 @@ static int fg_probe(struct spmi_device *spmi)
 
 	return rc;
 
-power_supply_unregister:
-	power_supply_unregister(&chip->bms_psy);
 cancel_work:
 	fg_cancel_all_works(chip);
 of_init_fail:
