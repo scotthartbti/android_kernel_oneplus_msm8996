@@ -1,0 +1,616 @@
+can't find file to patch at input line 5
+Perhaps you used the wrong -p or --strip option?
+The text leading up to this was:
+--------------------------
+|diff --git a/Android.mk b/Android.mk
+|index 2ae160a..e139d98 100644
+|--- a/Android.mk
+|+++ b/Android.mk
+--------------------------
+File to patch: 
+Skip this patch? [y] 
+Skipping patch.
+5 out of 5 hunks ignored
+patching file CORE/CLD_TXRX/HTT/htt.c
+patching file CORE/CLD_TXRX/HTT/htt.h
+patching file CORE/CLD_TXRX/HTT/htt_h2t.c
+patching file CORE/CLD_TXRX/HTT/htt_internal.h
+patching file CORE/CLD_TXRX/HTT/htt_rx.c
+patching file CORE/CLD_TXRX/HTT/htt_t2h.c
+patching file CORE/CLD_TXRX/HTT/htt_tx.c
+patching file CORE/CLD_TXRX/HTT/htt_types.h
+patching file CORE/CLD_TXRX/TLSHIM/tl_shim.c
+patching file CORE/CLD_TXRX/TLSHIM/tl_shim.h
+patching file CORE/CLD_TXRX/TXRX/ol_cfg.c
+patching file CORE/CLD_TXRX/TXRX/ol_rx.c
+patching file CORE/CLD_TXRX/TXRX/ol_rx.h
+patching file CORE/CLD_TXRX/TXRX/ol_rx_defrag.c
+patching file CORE/CLD_TXRX/TXRX/ol_rx_fwd.c
+patching file CORE/CLD_TXRX/TXRX/ol_rx_fwd.h
+patching file CORE/CLD_TXRX/TXRX/ol_rx_pn.c
+patching file CORE/CLD_TXRX/TXRX/ol_rx_reorder.c
+patching file CORE/CLD_TXRX/TXRX/ol_rx_reorder.h
+patching file CORE/CLD_TXRX/TXRX/ol_tx.c
+patching file CORE/CLD_TXRX/TXRX/ol_tx.h
+patching file CORE/CLD_TXRX/TXRX/ol_tx_classify.c
+patching file CORE/CLD_TXRX/TXRX/ol_tx_desc.c
+patching file CORE/CLD_TXRX/TXRX/ol_tx_desc.h
+patching file CORE/CLD_TXRX/TXRX/ol_tx_queue.c
+patching file CORE/CLD_TXRX/TXRX/ol_tx_queue.h
+patching file CORE/CLD_TXRX/TXRX/ol_tx_sched.c
+patching file CORE/CLD_TXRX/TXRX/ol_tx_send.c
+patching file CORE/CLD_TXRX/TXRX/ol_tx_send.h
+patching file CORE/CLD_TXRX/TXRX/ol_txrx.c
+patching file CORE/CLD_TXRX/TXRX/ol_txrx.h
+patching file CORE/CLD_TXRX/TXRX/ol_txrx_event.c
+patching file CORE/CLD_TXRX/TXRX/ol_txrx_types.h
+patching file CORE/EPPING/inc/epping_internal.h
+patching file CORE/EPPING/src/epping_helper.c
+patching file CORE/EPPING/src/epping_main.c
+patching file CORE/EPPING/src/epping_tx.c
+patching file CORE/EPPING/src/epping_txrx.c
+patching file CORE/HDD/inc/qc_sap_ioctl.h
+patching file CORE/HDD/inc/wlan_hdd_assoc.h
+patching file CORE/HDD/inc/wlan_hdd_cfg.h
+patching file CORE/HDD/inc/wlan_hdd_cfg80211.h
+patching file CORE/HDD/inc/wlan_hdd_dp_utils.h
+patching file CORE/HDD/inc/wlan_hdd_ftm.h
+patching file CORE/HDD/inc/wlan_hdd_host_offload.h
+patching file CORE/HDD/inc/wlan_hdd_hostapd.h
+patching file CORE/HDD/inc/wlan_hdd_includes.h
+patching file CORE/HDD/inc/wlan_hdd_ipa.h
+patching file CORE/HDD/inc/wlan_hdd_main.h
+patching file CORE/HDD/inc/wlan_hdd_memdump.h
+patching file CORE/HDD/inc/wlan_hdd_oemdata.h
+patching file CORE/HDD/inc/wlan_hdd_p2p.h
+patching file CORE/HDD/inc/wlan_hdd_power.h
+patching file CORE/HDD/inc/wlan_hdd_softap_tx_rx.h
+patching file CORE/HDD/inc/wlan_hdd_tdls.h
+patching file CORE/HDD/inc/wlan_hdd_tgt_cfg.h
+patching file CORE/HDD/inc/wlan_hdd_trace.h
+patching file CORE/HDD/inc/wlan_hdd_tx_rx.h
+patching file CORE/HDD/inc/wlan_hdd_wext.h
+patching file CORE/HDD/src/wlan_hdd_assoc.c
+patching file CORE/HDD/src/wlan_hdd_cfg.c
+patching file CORE/HDD/src/wlan_hdd_cfg80211.c
+patching file CORE/HDD/src/wlan_hdd_dev_pwr.c
+patching file CORE/HDD/src/wlan_hdd_dp_utils.c
+patching file CORE/HDD/src/wlan_hdd_early_suspend.c
+patching file CORE/HDD/src/wlan_hdd_ftm.c
+patching file CORE/HDD/src/wlan_hdd_hostapd.c
+patching file CORE/HDD/src/wlan_hdd_ipa.c
+Hunk #48 FAILED at 3669.
+1 out of 66 hunks FAILED -- saving rejects to file CORE/HDD/src/wlan_hdd_ipa.c.rej
+patching file CORE/HDD/src/wlan_hdd_main.c
+Hunk #35 FAILED at 4555.
+Hunk #36 FAILED at 4594.
+Hunk #37 succeeded at 4996 (offset 1 line).
+Hunk #38 succeeded at 5268 (offset 1 line).
+Hunk #39 succeeded at 6821 (offset 1 line).
+Hunk #40 succeeded at 7099 (offset 1 line).
+Hunk #41 succeeded at 7121 (offset 1 line).
+Hunk #42 succeeded at 7175 (offset 1 line).
+Hunk #43 succeeded at 7236 (offset 1 line).
+Hunk #44 succeeded at 7251 (offset 1 line).
+Hunk #45 succeeded at 7905 (offset 1 line).
+Hunk #46 succeeded at 7924 (offset 1 line).
+Hunk #47 succeeded at 7939 (offset 1 line).
+Hunk #48 succeeded at 8155 (offset 1 line).
+Hunk #49 succeeded at 8816 (offset 1 line).
+Hunk #50 succeeded at 8840 (offset 1 line).
+Hunk #51 succeeded at 8976 (offset 1 line).
+Hunk #52 succeeded at 9005 (offset 1 line).
+Hunk #53 succeeded at 9040 (offset 1 line).
+Hunk #54 succeeded at 9142 (offset 1 line).
+Hunk #55 succeeded at 9161 (offset 1 line).
+Hunk #56 succeeded at 9173 (offset 1 line).
+Hunk #57 succeeded at 9200 (offset 1 line).
+Hunk #58 succeeded at 9223 (offset 1 line).
+Hunk #59 succeeded at 9248 (offset 1 line).
+Hunk #60 succeeded at 9314 (offset 1 line).
+Hunk #61 succeeded at 9475 (offset 1 line).
+Hunk #62 succeeded at 9853 (offset 1 line).
+Hunk #63 succeeded at 9866 (offset 1 line).
+Hunk #64 succeeded at 9896 (offset 1 line).
+Hunk #65 succeeded at 9977 (offset 1 line).
+Hunk #66 succeeded at 10021 (offset 1 line).
+Hunk #67 succeeded at 10042 (offset 1 line).
+Hunk #68 succeeded at 10087 (offset 1 line).
+Hunk #69 succeeded at 10100 (offset 1 line).
+Hunk #70 succeeded at 10118 (offset 1 line).
+Hunk #71 succeeded at 10153 (offset 1 line).
+Hunk #72 succeeded at 10165 (offset 1 line).
+Hunk #73 succeeded at 10194 (offset 1 line).
+Hunk #74 succeeded at 10218 (offset 1 line).
+Hunk #75 succeeded at 10272 (offset 1 line).
+Hunk #76 succeeded at 10283 (offset 1 line).
+Hunk #77 succeeded at 10368 (offset 1 line).
+Hunk #78 succeeded at 10407 (offset 1 line).
+Hunk #79 succeeded at 10507 (offset 1 line).
+Hunk #80 succeeded at 10516 (offset 1 line).
+Hunk #81 succeeded at 10653 (offset 1 line).
+Hunk #82 succeeded at 10813 (offset 1 line).
+Hunk #83 succeeded at 10880 (offset 1 line).
+Hunk #84 succeeded at 10907 (offset 1 line).
+Hunk #85 succeeded at 10933 (offset 1 line).
+Hunk #86 succeeded at 10960 (offset 1 line).
+Hunk #87 succeeded at 10970 (offset 1 line).
+Hunk #88 succeeded at 10991 (offset 1 line).
+Hunk #89 succeeded at 11017 (offset 1 line).
+Hunk #90 succeeded at 11062 (offset 1 line).
+Hunk #91 succeeded at 11306 (offset 1 line).
+Hunk #92 succeeded at 11353 (offset 1 line).
+Hunk #93 succeeded at 11410 (offset 1 line).
+Hunk #94 succeeded at 11459 (offset 1 line).
+Hunk #95 succeeded at 11504 (offset 1 line).
+Hunk #96 succeeded at 11534 (offset 1 line).
+Hunk #97 succeeded at 11549 (offset 1 line).
+Hunk #98 succeeded at 11601 (offset 1 line).
+Hunk #99 succeeded at 11621 (offset 1 line).
+Hunk #100 succeeded at 11676 (offset 1 line).
+Hunk #101 succeeded at 11699 (offset 1 line).
+Hunk #102 succeeded at 11752 (offset 1 line).
+Hunk #103 succeeded at 11767 (offset 1 line).
+Hunk #104 succeeded at 11799 (offset 1 line).
+Hunk #105 succeeded at 11813 (offset 1 line).
+Hunk #106 succeeded at 11886 (offset 1 line).
+Hunk #107 succeeded at 11952 (offset 1 line).
+Hunk #108 succeeded at 12507 (offset 1 line).
+Hunk #109 succeeded at 12971 (offset 1 line).
+Hunk #110 succeeded at 13115 (offset 1 line).
+Hunk #111 succeeded at 13131 (offset 1 line).
+Hunk #112 succeeded at 13152 (offset 1 line).
+Hunk #113 succeeded at 13220 (offset 1 line).
+Hunk #114 succeeded at 13228 (offset 1 line).
+Hunk #115 succeeded at 13267 (offset 1 line).
+Hunk #116 succeeded at 13304 (offset 1 line).
+Hunk #117 succeeded at 13373 (offset 1 line).
+Hunk #118 succeeded at 13574 (offset 1 line).
+Hunk #119 succeeded at 13634 (offset 1 line).
+Hunk #120 succeeded at 13684 (offset 1 line).
+Hunk #121 succeeded at 13707 (offset 1 line).
+Hunk #122 succeeded at 13725 (offset 1 line).
+Hunk #123 succeeded at 13744 (offset 1 line).
+Hunk #124 succeeded at 13755 (offset 1 line).
+Hunk #125 succeeded at 13784 (offset 1 line).
+Hunk #126 succeeded at 13810 (offset 1 line).
+Hunk #127 succeeded at 13850 (offset 1 line).
+Hunk #128 succeeded at 13920 (offset 1 line).
+Hunk #129 succeeded at 13956 (offset 1 line).
+Hunk #130 succeeded at 14259 (offset 1 line).
+Hunk #131 succeeded at 14346 (offset 1 line).
+Hunk #132 succeeded at 14581 (offset 1 line).
+Hunk #133 succeeded at 14613 (offset 1 line).
+Hunk #134 succeeded at 14643 (offset 1 line).
+Hunk #135 succeeded at 14675 (offset 1 line).
+Hunk #136 succeeded at 14697 (offset 1 line).
+Hunk #137 succeeded at 14718 (offset 1 line).
+Hunk #138 succeeded at 14730 (offset 1 line).
+Hunk #139 succeeded at 14825 (offset 1 line).
+Hunk #140 succeeded at 15014 (offset 1 line).
+Hunk #141 succeeded at 15041 (offset 1 line).
+Hunk #142 succeeded at 15075 (offset 1 line).
+Hunk #143 succeeded at 15106 (offset 1 line).
+Hunk #144 succeeded at 15117 (offset 1 line).
+Hunk #145 succeeded at 15160 (offset 1 line).
+Hunk #146 succeeded at 15175 (offset 1 line).
+Hunk #147 succeeded at 15255 (offset 1 line).
+Hunk #148 succeeded at 15297 (offset 1 line).
+Hunk #149 succeeded at 15305 (offset 1 line).
+Hunk #150 succeeded at 15314 (offset 1 line).
+Hunk #151 succeeded at 15323 (offset 1 line).
+Hunk #152 succeeded at 15359 (offset 1 line).
+Hunk #153 succeeded at 15383 (offset 1 line).
+Hunk #154 succeeded at 15410 (offset 1 line).
+Hunk #155 succeeded at 15419 (offset 1 line).
+Hunk #156 succeeded at 15465 (offset 1 line).
+Hunk #157 succeeded at 15478 (offset 1 line).
+Hunk #158 succeeded at 15508 (offset 1 line).
+Hunk #159 succeeded at 15518 (offset 1 line).
+Hunk #160 succeeded at 15546 (offset 1 line).
+Hunk #161 succeeded at 15606 (offset 1 line).
+Hunk #162 succeeded at 15615 (offset 1 line).
+Hunk #163 succeeded at 15630 (offset 1 line).
+Hunk #164 succeeded at 15645 (offset 1 line).
+Hunk #165 succeeded at 15661 (offset 1 line).
+Hunk #166 succeeded at 15691 (offset 1 line).
+Hunk #167 succeeded at 15700 (offset 1 line).
+Hunk #168 succeeded at 15759 (offset 1 line).
+Hunk #169 succeeded at 15777 (offset 1 line).
+Hunk #170 succeeded at 15805 (offset 1 line).
+Hunk #171 succeeded at 15816 (offset 1 line).
+Hunk #172 succeeded at 15837 (offset 1 line).
+Hunk #173 succeeded at 15845 (offset 1 line).
+Hunk #174 succeeded at 15873 (offset 1 line).
+Hunk #175 succeeded at 15959 (offset 1 line).
+Hunk #176 succeeded at 15982 (offset 1 line).
+Hunk #177 succeeded at 16002 (offset 1 line).
+Hunk #178 succeeded at 16050 (offset 1 line).
+Hunk #179 succeeded at 16103 (offset 1 line).
+Hunk #180 succeeded at 16621 (offset 1 line).
+Hunk #181 succeeded at 16634 (offset 1 line).
+Hunk #182 succeeded at 16690 (offset 1 line).
+Hunk #183 succeeded at 16807 (offset 1 line).
+Hunk #184 succeeded at 16815 (offset 1 line).
+Hunk #185 succeeded at 16846 (offset 1 line).
+Hunk #186 succeeded at 16916 (offset 1 line).
+Hunk #187 succeeded at 16940 (offset 1 line).
+Hunk #188 succeeded at 17141 (offset 1 line).
+Hunk #189 succeeded at 17173 (offset 1 line).
+Hunk #190 succeeded at 17237 (offset 1 line).
+Hunk #191 succeeded at 17247 (offset 1 line).
+Hunk #192 succeeded at 17270 (offset 1 line).
+Hunk #193 succeeded at 17325 (offset 1 line).
+Hunk #194 succeeded at 17355 (offset 1 line).
+Hunk #195 succeeded at 17433 (offset 1 line).
+Hunk #196 succeeded at 17456 (offset 1 line).
+Hunk #197 succeeded at 17484 (offset 1 line).
+Hunk #198 succeeded at 17520 (offset 1 line).
+Hunk #199 succeeded at 17531 (offset 1 line).
+Hunk #200 succeeded at 17628 (offset 1 line).
+Hunk #201 succeeded at 17660 (offset 1 line).
+Hunk #202 succeeded at 17698 (offset 1 line).
+Hunk #203 succeeded at 17729 (offset 1 line).
+Hunk #204 succeeded at 18049 (offset 1 line).
+2 out of 204 hunks FAILED -- saving rejects to file CORE/HDD/src/wlan_hdd_main.c.rej
+patching file CORE/HDD/src/wlan_hdd_memdump.c
+patching file CORE/HDD/src/wlan_hdd_nan_datapath.c
+patching file CORE/HDD/src/wlan_hdd_nan_datapath.h
+patching file CORE/HDD/src/wlan_hdd_ocb.c
+patching file CORE/HDD/src/wlan_hdd_ocb.h
+patching file CORE/HDD/src/wlan_hdd_oemdata.c
+patching file CORE/HDD/src/wlan_hdd_p2p.c
+patching file CORE/HDD/src/wlan_hdd_scan.c
+patching file CORE/HDD/src/wlan_hdd_softap_tx_rx.c
+patching file CORE/HDD/src/wlan_hdd_tdls.c
+patching file CORE/HDD/src/wlan_hdd_trace.c
+patching file CORE/HDD/src/wlan_hdd_tsf.c
+patching file CORE/HDD/src/wlan_hdd_tx_rx.c
+Hunk #13 succeeded at 834 (offset 2 lines).
+Hunk #14 succeeded at 859 (offset 2 lines).
+Hunk #15 succeeded at 1059 (offset 2 lines).
+Hunk #16 succeeded at 1083 (offset 2 lines).
+Hunk #17 succeeded at 1240 (offset 2 lines).
+Hunk #18 succeeded at 1253 (offset 2 lines).
+Hunk #19 succeeded at 1310 (offset 2 lines).
+patching file CORE/HDD/src/wlan_hdd_wext.c
+patching file CORE/HDD/src/wlan_hdd_wmm.c
+patching file CORE/HDD/src/wlan_hdd_wowl.c
+patching file CORE/MAC/inc/aniGlobal.h
+patching file CORE/MAC/inc/qwlan_version.h
+patching file CORE/MAC/inc/sirApi.h
+patching file CORE/MAC/inc/sirMacProtDef.h
+patching file CORE/MAC/inc/wniApi.h
+patching file CORE/MAC/inc/wniCfgAp.h
+patching file CORE/MAC/inc/wniCfgSta.h
+patching file CORE/MAC/src/cfg/cfgApi.c
+patching file CORE/MAC/src/cfg/cfgProcMsg.c
+patching file CORE/MAC/src/cfg/cfgUtil/dot11f.frms
+patching file CORE/MAC/src/dph/dphHashTable.c
+patching file CORE/MAC/src/include/dot11f.h
+patching file CORE/MAC/src/include/dphGlobal.h
+patching file CORE/MAC/src/include/parserApi.h
+patching file CORE/MAC/src/include/sirParams.h
+patching file CORE/MAC/src/pe/include/limApi.h
+patching file CORE/MAC/src/pe/include/limGlobal.h
+patching file CORE/MAC/src/pe/include/limSession.h
+patching file CORE/MAC/src/pe/include/rrmGlobal.h
+patching file CORE/MAC/src/pe/lim/limAIDmgmt.c
+patching file CORE/MAC/src/pe/lim/limApi.c
+patching file CORE/MAC/src/pe/lim/limAssocUtils.c
+patching file CORE/MAC/src/pe/lim/limFT.c
+patching file CORE/MAC/src/pe/lim/limIbssPeerMgmt.c
+patching file CORE/MAC/src/pe/lim/limLinkMonitoringAlgo.c
+patching file CORE/MAC/src/pe/lim/limP2P.c
+patching file CORE/MAC/src/pe/lim/limProcessActionFrame.c
+patching file CORE/MAC/src/pe/lim/limProcessAssocReqFrame.c
+patching file CORE/MAC/src/pe/lim/limProcessAssocRspFrame.c
+patching file CORE/MAC/src/pe/lim/limProcessAuthFrame.c
+patching file CORE/MAC/src/pe/lim/limProcessBeaconFrame.c
+patching file CORE/MAC/src/pe/lim/limProcessCfgUpdates.c
+patching file CORE/MAC/src/pe/lim/limProcessDisassocFrame.c
+patching file CORE/MAC/src/pe/lim/limProcessMessageQueue.c
+patching file CORE/MAC/src/pe/lim/limProcessMlmReqMessages.c
+patching file CORE/MAC/src/pe/lim/limProcessMlmRspMessages.c
+patching file CORE/MAC/src/pe/lim/limProcessProbeReqFrame.c
+patching file CORE/MAC/src/pe/lim/limProcessSmeReqMessages.c
+patching file CORE/MAC/src/pe/lim/limProcessTdls.c
+patching file CORE/MAC/src/pe/lim/limPropExtsUtils.c
+patching file CORE/MAC/src/pe/lim/limScanResultUtils.c
+patching file CORE/MAC/src/pe/lim/limScanResultUtils.h
+patching file CORE/MAC/src/pe/lim/limSecurityUtils.c
+patching file CORE/MAC/src/pe/lim/limSendManagementFrames.c
+patching file CORE/MAC/src/pe/lim/limSendSmeRspMessages.c
+patching file CORE/MAC/src/pe/lim/limSerDesUtils.c
+patching file CORE/MAC/src/pe/lim/limSerDesUtils.h
+patching file CORE/MAC/src/pe/lim/limSession.c
+patching file CORE/MAC/src/pe/lim/limSmeReqUtils.c
+patching file CORE/MAC/src/pe/lim/limTimerUtils.c
+patching file CORE/MAC/src/pe/lim/limTimerUtils.h
+patching file CORE/MAC/src/pe/lim/limTrace.c
+patching file CORE/MAC/src/pe/lim/limTypes.h
+patching file CORE/MAC/src/pe/lim/limUtils.c
+patching file CORE/MAC/src/pe/lim/limUtils.h
+patching file CORE/MAC/src/pe/nan/nan_datapath.c
+patching file CORE/MAC/src/pe/nan/nan_datapath.h
+patching file CORE/MAC/src/pe/pmm/pmmApi.c
+patching file CORE/MAC/src/pe/rrm/rrmApi.c
+patching file CORE/MAC/src/pe/sch/schBeaconGen.c
+patching file CORE/MAC/src/pe/sch/schBeaconProcess.c
+patching file CORE/SAP/inc/sapApi.h
+patching file CORE/SAP/src/sapApiLinkCntl.c
+patching file CORE/SAP/src/sapChSelect.c
+patching file CORE/SAP/src/sapFsm.c
+patching file CORE/SAP/src/sapInternal.h
+patching file CORE/SAP/src/sapModule.c
+patching file CORE/SERVICES/BMI/ar6320v2_dbg_regtable.h
+patching file CORE/SERVICES/BMI/bmi.c
+patching file CORE/SERVICES/BMI/ol_fw.c
+Hunk #15 FAILED at 1019.
+Hunk #16 succeeded at 1034 (offset 2 lines).
+Hunk #17 succeeded at 1059 (offset 2 lines).
+Hunk #18 succeeded at 1085 (offset 2 lines).
+Hunk #19 succeeded at 1113 (offset 2 lines).
+Hunk #20 succeeded at 1125 (offset 2 lines).
+Hunk #21 succeeded at 1150 (offset 2 lines).
+Hunk #22 succeeded at 1210 (offset 2 lines).
+Hunk #23 succeeded at 1274 (offset 2 lines).
+Hunk #24 succeeded at 1294 (offset 2 lines).
+Hunk #25 succeeded at 1319 (offset 2 lines).
+Hunk #26 succeeded at 1450 (offset 2 lines).
+Hunk #27 succeeded at 1472 (offset 2 lines).
+Hunk #28 succeeded at 1484 (offset 2 lines).
+Hunk #29 succeeded at 1515 (offset 2 lines).
+Hunk #30 succeeded at 1588 (offset 2 lines).
+Hunk #31 succeeded at 1779 (offset 2 lines).
+Hunk #32 succeeded at 2044 (offset 2 lines).
+Hunk #33 succeeded at 2083 (offset 2 lines).
+Hunk #34 succeeded at 2134 (offset 2 lines).
+Hunk #35 succeeded at 2249 (offset 2 lines).
+Hunk #36 succeeded at 2366 (offset 2 lines).
+Hunk #37 succeeded at 2387 (offset 2 lines).
+Hunk #38 succeeded at 2401 (offset 2 lines).
+Hunk #39 succeeded at 2496 (offset 2 lines).
+Hunk #40 succeeded at 2521 (offset 2 lines).
+Hunk #41 succeeded at 2633 (offset 2 lines).
+1 out of 41 hunks FAILED -- saving rejects to file CORE/SERVICES/BMI/ol_fw.c.rej
+patching file CORE/SERVICES/BMI/ol_fw.h
+patching file CORE/SERVICES/COMMON/a_debug.h
+patching file CORE/SERVICES/COMMON/adf/adf_nbuf.c
+patching file CORE/SERVICES/COMMON/adf/adf_nbuf.h
+patching file CORE/SERVICES/COMMON/adf/adf_os_atomic.h
+patching file CORE/SERVICES/COMMON/adf/adf_os_mem.c
+patching file CORE/SERVICES/COMMON/adf/adf_os_mem.h
+patching file CORE/SERVICES/COMMON/adf/adf_os_time.h
+patching file CORE/SERVICES/COMMON/adf/adf_os_util.h
+patching file CORE/SERVICES/COMMON/adf/adf_trace.c
+patching file CORE/SERVICES/COMMON/adf/adf_trace.h
+patching file CORE/SERVICES/COMMON/adf/linux/adf_nbuf_pvt.h
+patching file CORE/SERVICES/COMMON/adf/linux/adf_os_atomic_pvt.h
+patching file CORE/SERVICES/COMMON/adf/linux/adf_os_defer_pvt.c
+patching file CORE/SERVICES/COMMON/adf/linux/adf_os_defer_pvt.h
+patching file CORE/SERVICES/COMMON/adf/linux/adf_os_lock_pvt.c
+patching file CORE/SERVICES/COMMON/adf/linux/adf_os_mem_pvt.c
+patching file CORE/SERVICES/COMMON/adf/linux/adf_os_mem_pvt.h
+patching file CORE/SERVICES/COMMON/adf/linux/adf_os_util_pvt.h
+patching file CORE/SERVICES/COMMON/dbglog_host.h
+patching file CORE/SERVICES/COMMON/dbglog_id.h
+patching file CORE/SERVICES/COMMON/debug_linux.h
+patching file CORE/SERVICES/COMMON/hif.h
+patching file CORE/SERVICES/COMMON/hif_msg_based.h
+patching file CORE/SERVICES/COMMON/htc_api.h
+patching file CORE/SERVICES/COMMON/ieee80211_defines.h
+patching file CORE/SERVICES/COMMON/ol_cfg.h
+patching file CORE/SERVICES/COMMON/ol_htt_api.h
+patching file CORE/SERVICES/COMMON/ol_if_athvar.h
+patching file CORE/SERVICES/COMMON/ol_txrx_api.h
+patching file CORE/SERVICES/COMMON/ol_txrx_ctrl_api.h
+patching file CORE/SERVICES/COMMON/ol_txrx_dbg.h
+patching file CORE/SERVICES/COMMON/ol_txrx_osif_api.h
+patching file CORE/SERVICES/COMMON/osapi_linux.h
+patching file CORE/SERVICES/COMMON/pktlog_ac_fmt.h
+patching file CORE/SERVICES/COMMON/wal_rx_desc.h
+patching file CORE/SERVICES/COMMON/wdi_in.h
+patching file CORE/SERVICES/COMMON/wlan_defs.h
+patching file CORE/SERVICES/COMMON/wlan_module_ids.h
+patching file CORE/SERVICES/COMMON/wlan_tgt_def_config.h
+Hunk #3 FAILED at 155.
+1 out of 3 hunks FAILED -- saving rejects to file CORE/SERVICES/COMMON/wlan_tgt_def_config.h.rej
+patching file CORE/SERVICES/COMMON/wlan_tgt_def_config_hl.h
+Hunk #3 FAILED at 238.
+1 out of 3 hunks FAILED -- saving rejects to file CORE/SERVICES/COMMON/wlan_tgt_def_config_hl.h.rej
+patching file CORE/SERVICES/COMMON/wma_api.h
+patching file CORE/SERVICES/COMMON/wmi.h
+patching file CORE/SERVICES/COMMON/wmi_services.h
+patching file CORE/SERVICES/COMMON/wmi_tlv_defs.h
+patching file CORE/SERVICES/COMMON/wmi_unified.h
+patching file CORE/SERVICES/COMMON/wmi_version.h
+patching file CORE/SERVICES/DFS/inc/dfs.h
+patching file CORE/SERVICES/DFS/src/dfs.c
+patching file CORE/SERVICES/DFS/src/dfs_debug.c
+patching file CORE/SERVICES/DFS/src/dfs_init.c
+patching file CORE/SERVICES/DFS/src/dfs_process_phyerr.c
+patching file CORE/SERVICES/DFS/src/dfs_process_radarevent.c
+patching file CORE/SERVICES/HIF/PCIe/copy_engine.c
+patching file CORE/SERVICES/HIF/PCIe/copy_engine_api.h
+patching file CORE/SERVICES/HIF/PCIe/copy_engine_internal.h
+patching file CORE/SERVICES/HIF/PCIe/hif_pci.c
+patching file CORE/SERVICES/HIF/PCIe/hif_pci.h
+patching file CORE/SERVICES/HIF/PCIe/if_pci.c
+Hunk #19 FAILED at 2799.
+Hunk #21 FAILED at 2849.
+Hunk #22 succeeded at 2872 (offset -3 lines).
+Hunk #23 succeeded at 2921 (offset -3 lines).
+Hunk #24 succeeded at 2994 (offset -3 lines).
+Hunk #25 succeeded at 3011 (offset -3 lines).
+Hunk #26 FAILED at 3031.
+Hunk #27 succeeded at 3137 (offset -3 lines).
+3 out of 27 hunks FAILED -- saving rejects to file CORE/SERVICES/HIF/PCIe/if_pci.c.rej
+patching file CORE/SERVICES/HIF/PCIe/if_pci.h
+patching file CORE/SERVICES/HIF/USB/hif_usb.c
+patching file CORE/SERVICES/HIF/USB/if_usb.c
+patching file CORE/SERVICES/HIF/USB/if_usb.h
+patching file CORE/SERVICES/HIF/USB/usbdrv.c
+patching file CORE/SERVICES/HIF/ath_procfs.c
+patching file CORE/SERVICES/HIF/common/hif_bmi_reg_access.c
+patching file CORE/SERVICES/HIF/common/hif_sdio_common.h
+patching file CORE/SERVICES/HIF/sdio/hif_sdio_dev.c
+patching file CORE/SERVICES/HIF/sdio/hif_sdio_internal.h
+patching file CORE/SERVICES/HIF/sdio/hif_sdio_recv.c
+patching file CORE/SERVICES/HIF/sdio/hif_sdio_send.c
+patching file CORE/SERVICES/HIF/sdio/linux/if_ath_sdio.c
+patching file CORE/SERVICES/HIF/sdio/linux/if_ath_sdio.h
+patching file CORE/SERVICES/HIF/sdio/linux/native_sdio/include/hif_internal.h
+patching file CORE/SERVICES/HIF/sdio/linux/native_sdio/src/hif.c
+patching file CORE/SERVICES/HTC/htc.c
+patching file CORE/SERVICES/HTC/htc_internal.h
+patching file CORE/SERVICES/HTC/htc_recv.c
+patching file CORE/SERVICES/HTC/htc_send.c
+patching file CORE/SERVICES/WMA/regdomain.c
+patching file CORE/SERVICES/WMA/regdomain.h
+patching file CORE/SERVICES/WMA/regdomain_common.h
+patching file CORE/SERVICES/WMA/wlan_nv.c
+patching file CORE/SERVICES/WMA/wma.c
+patching file CORE/SERVICES/WMA/wma.h
+patching file CORE/SERVICES/WMA/wma_nan_datapath.c
+patching file CORE/SERVICES/WMA/wma_nan_datapath.h
+patching file CORE/SERVICES/WMA/wma_ocb.c
+patching file CORE/SERVICES/WMA/wma_ocb.h
+patching file CORE/SERVICES/WMI/wmi_tlv_helper.c
+Reversed (or previously applied) patch detected!  Assume -R? [n] 
+Apply anyway? [n] 
+Skipping patch.
+1 out of 1 hunk ignored -- saving rejects to file CORE/SERVICES/WMI/wmi_tlv_helper.c.rej
+patching file CORE/SERVICES/WMI/wmi_unified.c
+patching file CORE/SERVICES/WMI/wmi_unified_priv.h
+patching file CORE/SME/inc/csrApi.h
+patching file CORE/SME/inc/csrInternal.h
+patching file CORE/SME/inc/csrNeighborRoam.h
+patching file CORE/SME/inc/oemDataApi.h
+patching file CORE/SME/inc/oemDataInternal.h
+patching file CORE/SME/inc/pmcApi.h
+patching file CORE/SME/inc/smeInside.h
+patching file CORE/SME/inc/smeInternal.h
+patching file CORE/SME/inc/sme_Api.h
+patching file CORE/SME/inc/sme_FTApi.h
+patching file CORE/SME/inc/sme_QosApi.h
+patching file CORE/SME/inc/sme_Trace.h
+patching file CORE/SME/inc/sme_nan_datapath.h
+patching file CORE/SME/src/QoS/sme_Qos.c
+patching file CORE/SME/src/btc/btcApi.c
+patching file CORE/SME/src/ccm/ccmApi.c
+patching file CORE/SME/src/csr/csrApiRoam.c
+patching file CORE/SME/src/csr/csrApiScan.c
+patching file CORE/SME/src/csr/csrInsideApi.h
+patching file CORE/SME/src/csr/csrLinkList.c
+patching file CORE/SME/src/csr/csrNeighborRoam.c
+patching file CORE/SME/src/csr/csrTdlsProcess.c
+patching file CORE/SME/src/csr/csrUtil.c
+patching file CORE/SME/src/nan/nan_Api.c
+patching file CORE/SME/src/nan/nan_datapath_api.c
+patching file CORE/SME/src/oemData/oemDataApi.c
+patching file CORE/SME/src/p2p/p2p_Api.c
+patching file CORE/SME/src/pmc/pmc.c
+patching file CORE/SME/src/pmc/pmcApi.c
+patching file CORE/SME/src/rrm/sme_rrm.c
+patching file CORE/SME/src/sme_common/sme_Api.c
+patching file CORE/SME/src/sme_common/sme_FTApi.c
+patching file CORE/SME/src/sme_common/sme_Trace.c
+patching file CORE/SVC/external/wlan_nlink_common.h
+patching file CORE/SVC/inc/wlan_logging_sock_svc.h
+patching file CORE/SVC/inc/wlan_nlink_srv.h
+patching file CORE/SVC/inc/wlan_ptt_sock_svc.h
+patching file CORE/SVC/src/logging/wlan_logging_sock_svc.c
+patching file CORE/SVC/src/nlink/wlan_nlink_srv.c
+patching file CORE/SVC/src/ptt/wlan_ptt_sock_svc.c
+patching file CORE/SYS/common/inc/wlan_qct_sys.h
+patching file CORE/SYS/common/src/wlan_qct_sys.c
+patching file CORE/SYS/legacy/src/pal/inc/palApi.h
+patching file CORE/SYS/legacy/src/pal/src/palApiComm.c
+patching file CORE/SYS/legacy/src/platform/src/VossWrapper.c
+patching file CORE/SYS/legacy/src/system/src/sysEntryFunc.c
+patching file CORE/SYS/legacy/src/utils/src/dot11f.c
+patching file CORE/SYS/legacy/src/utils/src/logDump.c
+patching file CORE/SYS/legacy/src/utils/src/macTrace.c
+patching file CORE/SYS/legacy/src/utils/src/parserApi.c
+patching file CORE/TL/inc/wlan_qct_tl.h
+patching file CORE/UTILS/FWLOG/dbglog_host.c
+patching file CORE/UTILS/PKTLOG/include/pktlog_ac.h
+patching file CORE/UTILS/PKTLOG/linux_ac.c
+patching file CORE/UTILS/PKTLOG/pktlog_ac.c
+patching file CORE/UTILS/PKTLOG/pktlog_internal.c
+patching file CORE/VOSS/inc/event_defs.h
+patching file CORE/VOSS/inc/i_vos_diag_core_event.h
+patching file CORE/VOSS/inc/i_vos_lock.h
+patching file CORE/VOSS/inc/i_vos_timer.h
+patching file CORE/VOSS/inc/i_vos_trace.h
+patching file CORE/VOSS/inc/vos_api.h
+patching file CORE/VOSS/inc/vos_cnss.h
+patching file CORE/VOSS/inc/vos_diag_core_event.h
+patching file CORE/VOSS/inc/vos_getBin.h
+patching file CORE/VOSS/inc/vos_lock.h
+patching file CORE/VOSS/inc/vos_mq.h
+patching file CORE/VOSS/inc/vos_nvitem.h
+patching file CORE/VOSS/inc/vos_packet.h
+patching file CORE/VOSS/inc/vos_timer.h
+patching file CORE/VOSS/inc/vos_trace.h
+patching file CORE/VOSS/inc/vos_types.h
+patching file CORE/VOSS/inc/vos_utils.h
+patching file CORE/VOSS/inc/wlan_hdd_misc.h
+patching file CORE/VOSS/src/vos_api.c
+patching file CORE/VOSS/src/vos_diag.c
+patching file CORE/VOSS/src/vos_getBin.c
+patching file CORE/VOSS/src/vos_lock.c
+patching file CORE/VOSS/src/vos_memory.c
+patching file CORE/VOSS/src/vos_nvitem.c
+patching file CORE/VOSS/src/vos_packet.c
+patching file CORE/VOSS/src/vos_sched.c
+patching file CORE/VOSS/src/vos_sched.h
+patching file CORE/VOSS/src/vos_timer.c
+patching file CORE/VOSS/src/vos_trace.c
+patching file CORE/VOSS/src/vos_utils.c
+patching file CORE/WDA/inc/legacy/halMsgApi.h
+patching file CORE/WDA/inc/legacy/halTypes.h
+patching file CORE/WDA/inc/wlan_qct_wda.h
+patching file Kbuild
+Hunk #21 FAILED at 1127.
+Hunk #22 succeeded at 1197 (offset 3 lines).
+Hunk #23 succeeded at 1366 (offset 3 lines).
+Hunk #24 succeeded at 1400 (offset 3 lines).
+Hunk #25 succeeded at 1478 (offset 3 lines).
+Hunk #26 succeeded at 1517 (offset 3 lines).
+Hunk #27 succeeded at 1561 (offset 3 lines).
+Hunk #28 succeeded at 1597 with fuzz 1 (offset 7 lines).
+1 out of 28 hunks FAILED -- saving rejects to file Kbuild.rej
+patching file Kconfig
+Hunk #1 succeeded at 41 (offset 4 lines).
+Hunk #2 succeeded at 78 (offset 4 lines).
+patching file Makefile
+can't find file to patch at input line 105038
+Perhaps you used the wrong -p or --strip option?
+The text leading up to this was:
+--------------------------
+|diff --git a/firmware_bin/WCNSS_qcom_cfg.ini b/firmware_bin/WCNSS_qcom_cfg.ini
+|index 0c97f5e..51345ff 100755
+|--- a/firmware_bin/WCNSS_qcom_cfg.ini
+|+++ b/firmware_bin/WCNSS_qcom_cfg.ini
+--------------------------
+File to patch: 
+Skip this patch? [y] 
+Skipping patch.
+2 out of 2 hunks ignored
+can't find file to patch at input line 105074
+Perhaps you used the wrong -p or --strip option?
+The text leading up to this was:
+--------------------------
+|diff --git a/firmware_bin/WCNSS_qcom_cfg.usb.ini b/firmware_bin/WCNSS_qcom_cfg.usb.ini
+|index 0a7422f..e830762 100644
+|--- a/firmware_bin/WCNSS_qcom_cfg.usb.ini
+|+++ b/firmware_bin/WCNSS_qcom_cfg.usb.ini
+--------------------------
+File to patch: 
+Skip this patch? [y] 
+Skipping patch.
+1 out of 1 hunk ignored
+patching file wcnss/inc/halLegacyPalTypes.h
+patching file wcnss/inc/wlan_nv.h

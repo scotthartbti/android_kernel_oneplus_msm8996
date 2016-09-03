@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012-2015 The Linux Foundation. All rights reserved.
+ * Copyright (c) 2012-2016 The Linux Foundation. All rights reserved.
  *
  * Previously licensed under the ISC license by Qualcomm Atheros, Inc.
  *
@@ -2856,7 +2856,9 @@ tSirRetStatus limProcessSmeTdlsMgmtSendReq(tpAniSirGlobal pMac,
                            psessionEntry->limSmeState);
         goto lim_tdls_send_mgmt_error;
     }
-
+    vos_tdls_tx_rx_mgmt_event(SIR_MAC_ACTION_TDLS,
+              SIR_MAC_ACTION_TX, SIR_MAC_MGMT_ACTION,
+              pSendMgmtReq->reqType, pSendMgmtReq->peerMac);
     switch( pSendMgmtReq->reqType )
     {
         case SIR_MAC_TDLS_DIS_REQ:
@@ -3312,7 +3314,6 @@ lim_tdls_link_establish_error:
     return eSIR_SUCCESS;
 }
 
-
 /**
  * lim_check_aid_and_delete_peer - Funtion to check aid and delete peer
  * @p_mac: pointer to mac context
@@ -3371,7 +3372,6 @@ skip:
 /* Delete all the TDLS peer connected before leaving the BSS */
 tSirRetStatus limDeleteTDLSPeers(tpAniSirGlobal pMac, tpPESession psessionEntry)
 {
-
     if (NULL == psessionEntry)
     {
         limLog(pMac, LOGE, FL("NULL psessionEntry"));

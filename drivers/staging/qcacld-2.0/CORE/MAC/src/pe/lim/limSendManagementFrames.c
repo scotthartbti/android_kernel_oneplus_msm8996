@@ -1311,6 +1311,18 @@ limSendAssocRspMgmtFrame(tpAniSirGlobal pMac,
         {
             limLog(pMac, LOG1, FL("Populate HT IEs in Assoc Response"));
             PopulateDot11fHTCaps( pMac, psessionEntry, &frm.HTCaps );
+            /*
+             * Check the STA capability and update the HTCaps accordingly
+             */
+            frm.HTCaps.supportedChannelWidthSet =
+                    (pSta->htSupportedChannelWidthSet <
+                       psessionEntry->htSupportedChannelWidthSet) ?
+                         pSta->htSupportedChannelWidthSet :
+                         psessionEntry->htSupportedChannelWidthSet ;
+
+            if (!frm.HTCaps.supportedChannelWidthSet)
+                frm.HTCaps.shortGI40MHz = 0;
+
             PopulateDot11fHTInfo( pMac, &frm.HTInfo, psessionEntry );
         }
         limLog(pMac, LOG1, FL("SupportedChnlWidth: %d, mimoPS: %d, GF: %d, shortGI20:%d, shortGI40: %d, dsssCck: %d, AMPDU Param: %x"),
@@ -1329,6 +1341,23 @@ limSendAssocRspMgmtFrame(tpAniSirGlobal pMac,
             PopulateDot11fVHTCaps( pMac, psessionEntry, &frm.VHTCaps );
             PopulateDot11fVHTOperation( pMac, psessionEntry, &frm.VHTOperation);
             isVHTEnabled = eANI_BOOLEAN_TRUE;
+        }
+
+        if (psessionEntry->vhtCapability &&
+            psessionEntry->vendor_vht_for_24ghz_sap &&
+            (pAssocReq != NULL) && pAssocReq->vendor2_ie.VHTCaps.present) {
+            limLog(pMac, LOG1,
+                        FL("Populate Vendor VHT IEs in Assoc Response"));
+            frm.vendor2_ie.present = 1;
+            frm.vendor2_ie.type =
+                     psessionEntry->vendor_specific_vht_ie_type;
+            frm.vendor2_ie.sub_type =
+                     psessionEntry->vendor_specific_vht_ie_sub_type;
+
+            frm.vendor2_ie.VHTCaps.present = 1;
+            PopulateDot11fVHTCaps(pMac, psessionEntry,
+                                    &frm.vendor2_ie.VHTCaps);
+            isVHTEnabled = true;
         }
 #endif
 
@@ -2054,11 +2083,11 @@ limSendAssocReqMgmtFrame(tpAniSirGlobal   pMac,
 
     vos_mem_set( ( tANI_U8* )pFrm, sizeof( tDot11fAssocRequest ), 0 );
 
-    if (nAddIELen) {
+    if (nAddIELen && psessionEntry->is_ext_caps_present) {
         vos_mem_set(( tANI_U8* )&extractedExtCap, sizeof( tDot11fIEExtCap ), 0);
         nSirStatus = lim_strip_extcap_update_struct(pMac, pAddIE,
-                                      &nAddIELen,
-                                      &extractedExtCap );
+                      &nAddIELen,
+                      &extractedExtCap );
         if(eSIR_SUCCESS != nSirStatus )
         {
             extractedExtCapFlag = eANI_BOOLEAN_FALSE;
@@ -2074,7 +2103,8 @@ limSendAssocReqMgmtFrame(tpAniSirGlobal   pMac,
             extractedExtCapFlag = lim_is_ext_cap_ie_present(p_ext_cap);
         }
     } else {
-        limLog(pMac, LOG1, FL("No additional IE for Assoc Request"));
+        limLog(pMac, LOG1,
+                FL("No addn IE or peer dosen't support addnIE for Assoc Req"));
         extractedExtCapFlag = eANI_BOOLEAN_FALSE;
     }
 
@@ -2214,9 +2244,26 @@ limSendAssocReqMgmtFrame(tpAniSirGlobal   pMac,
         PopulateDot11fVHTCaps( pMac, psessionEntry, &pFrm->VHTCaps );
         isVHTEnabled = eANI_BOOLEAN_TRUE;
     }
-#endif
+    if (psessionEntry->vhtCapability && !isVHTEnabled &&
+       psessionEntry->is_vendor_specific_vhtcaps) {
+        limLog(pMac, LOG1,
+                    FL("Populate Vendor VHT IEs in Assoc Request"));
+        pFrm->vendor2_ie.present = 1;
+        pFrm->vendor2_ie.type =
+                 psessionEntry->vendor_specific_vht_ie_type;
+        pFrm->vendor2_ie.sub_type =
+                 psessionEntry->vendor_specific_vht_ie_sub_type;
 
-    PopulateDot11fExtCap( pMac, isVHTEnabled, &pFrm->ExtCap, psessionEntry);
+        pFrm->vendor2_ie.VHTCaps.present = 1;
+        PopulateDot11fVHTCaps(pMac, psessionEntry,
+                                &pFrm->vendor2_ie.VHTCaps);
+        isVHTEnabled = true;
+    }
+
+
+#endif
+    if (psessionEntry->is_ext_caps_present)
+        PopulateDot11fExtCap( pMac, isVHTEnabled, &pFrm->ExtCap, psessionEntry);
 
 #if defined WLAN_FEATURE_VOWIFI_11R
     if (psessionEntry->pLimJoinReq->is11Rconnection)
@@ -2385,7 +2432,8 @@ limSendAssocReqMgmtFrame(tpAniSirGlobal   pMac,
         txFlag |= HAL_USE_BD_RATE2_FOR_MANAGEMENT_FRAME;
     }
 
-    if(psessionEntry->pePersona == VOS_P2P_CLIENT_MODE)
+    if(psessionEntry->pePersona == VOS_P2P_CLIENT_MODE ||
+       psessionEntry->pePersona == VOS_STA_MODE)
     {
         txFlag |= HAL_USE_PEER_STA_REQUESTED_MASK;
     }
@@ -2685,7 +2733,23 @@ limSendReassocReqWithFTIEsMgmtFrame(tpAniSirGlobal     pMac,
         limLog( pMac, LOG1, FL("Populate VHT IEs in Re-Assoc Request"));
         PopulateDot11fVHTCaps( pMac, psessionEntry, &frm.VHTCaps );
         isVHTEnabled = eANI_BOOLEAN_TRUE;
+    }
+    if (psessionEntry->is_ext_caps_present)
         PopulateDot11fExtCap(pMac, isVHTEnabled, &frm.ExtCap, psessionEntry);
+
+    if (psessionEntry->vhtCapability && !isVHTEnabled &&
+       psessionEntry->is_vendor_specific_vhtcaps) {
+        limLog(pMac, LOG1,
+                        FL("Populate Vendor VHT IEs in Re-Assoc Request"));
+        frm.vendor2_ie.present = 1;
+        frm.vendor2_ie.type =
+                        psessionEntry->vendor_specific_vht_ie_type;
+        frm.vendor2_ie.sub_type =
+                        psessionEntry->vendor_specific_vht_ie_sub_type;
+        frm.vendor2_ie.VHTCaps.present = 1;
+        PopulateDot11fVHTCaps(pMac, psessionEntry,
+                                &frm.vendor2_ie.VHTCaps);
+        isVHTEnabled = true;
     }
 #endif
 
@@ -2822,14 +2886,17 @@ limSendReassocReqWithFTIEsMgmtFrame(tpAniSirGlobal     pMac,
                 (nBytes + ft_ies_length));)
 #endif
 
-
-    if( ( SIR_BAND_5_GHZ == limGetRFBand(psessionEntry->currentOperChannel))
-       || ( psessionEntry->pePersona == VOS_P2P_CLIENT_MODE ) ||
-         ( psessionEntry->pePersona == VOS_P2P_GO_MODE)
-         )
-    {
-        txFlag |= HAL_USE_BD_RATE2_FOR_MANAGEMENT_FRAME;
-    }
+#if defined(WLAN_FEATURE_VOWIFI_11R) || defined(FEATURE_WLAN_ESE) || defined(FEATURE_WLAN_LFR)
+    if ((NULL != psessionEntry->ftPEContext.pFTPreAuthReq) &&
+         ( SIR_BAND_5_GHZ == limGetRFBand(
+              psessionEntry->ftPEContext.pFTPreAuthReq->preAuthchannelNum)))
+         txFlag |= HAL_USE_BD_RATE2_FOR_MANAGEMENT_FRAME;
+    else
+#endif
+     if( (SIR_BAND_5_GHZ == limGetRFBand(psessionEntry->currentOperChannel)) ||
+                (psessionEntry->pePersona == VOS_P2P_CLIENT_MODE) ||
+                (psessionEntry->pePersona == VOS_P2P_GO_MODE))
+         txFlag |= HAL_USE_BD_RATE2_FOR_MANAGEMENT_FRAME;
 
     if( NULL != psessionEntry->assocReq )
     {
@@ -3117,7 +3184,8 @@ limSendReassocReqMgmtFrame(tpAniSirGlobal     pMac,
     }
 #endif
 
-    PopulateDot11fExtCap(pMac, isVHTEnabled, &frm.ExtCap, psessionEntry);
+    if (psessionEntry->is_ext_caps_present)
+        PopulateDot11fExtCap(pMac, isVHTEnabled, &frm.ExtCap, psessionEntry);
 
     nStatus = dot11fGetPackedReAssocRequestSize( pMac, &frm, &nPayload );
     if ( DOT11F_FAILED( nStatus ) )
@@ -3218,15 +3286,15 @@ limSendReassocReqMgmtFrame(tpAniSirGlobal     pMac,
         psessionEntry->assocReqLen = nPayload;
     }
 
-    if( ( SIR_BAND_5_GHZ == limGetRFBand(psessionEntry->currentOperChannel))
-       || ( psessionEntry->pePersona == VOS_P2P_CLIENT_MODE ) ||
-         ( psessionEntry->pePersona == VOS_P2P_GO_MODE)
-         )
+    if( (SIR_BAND_5_GHZ == limGetRFBand(psessionEntry->currentOperChannel)) ||
+            (psessionEntry->pePersona == VOS_P2P_CLIENT_MODE) ||
+            (psessionEntry->pePersona == VOS_P2P_GO_MODE))
     {
         txFlag |= HAL_USE_BD_RATE2_FOR_MANAGEMENT_FRAME;
     }
 
-    if(psessionEntry->pePersona == VOS_P2P_CLIENT_MODE)
+    if(psessionEntry->pePersona == VOS_P2P_CLIENT_MODE ||
+       psessionEntry->pePersona == VOS_STA_MODE)
     {
         txFlag |= HAL_USE_PEER_STA_REQUESTED_MASK;
     }
@@ -3580,20 +3648,20 @@ limSendAuthMgmtFrame(tpAniSirGlobal pMac,
     }
     PELOG2(sirDumpBuf(pMac, SIR_LIM_MODULE_ID, LOG2, pFrame, frameLen);)
 
-    if( (SIR_BAND_5_GHZ == limGetRFBand(psessionEntry->currentOperChannel)) ||
-        (psessionEntry->pePersona == VOS_P2P_CLIENT_MODE) ||
-        (psessionEntry->pePersona == VOS_P2P_GO_MODE)
 #if defined(WLAN_FEATURE_VOWIFI_11R) || defined(FEATURE_WLAN_ESE) || defined(FEATURE_WLAN_LFR)
-         ||  ((NULL != psessionEntry->ftPEContext.pFTPreAuthReq) &&
-         (SIR_BAND_5_GHZ ==
-           limGetRFBand(psessionEntry->ftPEContext.pFTPreAuthReq->preAuthchannelNum)))
-#endif
-      )
-    {
+    if ((NULL != psessionEntry->ftPEContext.pFTPreAuthReq) &&
+         ( SIR_BAND_5_GHZ == limGetRFBand(
+             psessionEntry->ftPEContext.pFTPreAuthReq->preAuthchannelNum)))
         txFlag |= HAL_USE_BD_RATE2_FOR_MANAGEMENT_FRAME;
-    }
+    else
+#endif
+    if( (SIR_BAND_5_GHZ == limGetRFBand(psessionEntry->currentOperChannel)) ||
+         (psessionEntry->pePersona == VOS_P2P_CLIENT_MODE) ||
+         (psessionEntry->pePersona == VOS_P2P_GO_MODE))
+        txFlag |= HAL_USE_BD_RATE2_FOR_MANAGEMENT_FRAME;
 
-    if(psessionEntry->pePersona == VOS_P2P_CLIENT_MODE)
+   if(psessionEntry->pePersona == VOS_P2P_CLIENT_MODE ||
+       psessionEntry->pePersona == VOS_STA_MODE)
     {
         txFlag |= HAL_USE_PEER_STA_REQUESTED_MASK;
     }
@@ -3782,30 +3850,12 @@ eHalStatus limSendDisassocCnf(tpAniSirGlobal pMac)
 
 #ifdef WLAN_FEATURE_VOWIFI_11R
         if  (LIM_IS_STA_ROLE(psessionEntry) &&
-                (
-#ifdef FEATURE_WLAN_ESE
-                (psessionEntry->isESEconnection ) ||
-#endif
-#ifdef FEATURE_WLAN_LFR
-                (psessionEntry->isFastRoamIniFeatureEnabled ) ||
-#endif
-                (psessionEntry->is11Rconnection )) &&
                 (pMlmDisassocReq->reasonCode !=
                  eSIR_MAC_DISASSOC_DUE_TO_FTHANDOFF_REASON))
         {
             PELOGE(limLog(pMac, LOG1,
-                   FL("FT Preauth Session (%p,%d) Clean up"),
-                   psessionEntry, psessionEntry->peSessionId););
+                   FL("FT Preauth Session (%p,%d) Clean up"
 
-#if defined WLAN_FEATURE_VOWIFI_11R
-        /* Delete FT session if there exists one */
-        limFTCleanupPreAuthInfo(pMac, psessionEntry);
-#endif
-        }
-        else
-        {
-            PELOGE(limLog(pMac, LOGE,
-                   FL("No FT Preauth Session Clean up in role %d"
 #ifdef FEATURE_WLAN_ESE
                    " isESE %d"
 #endif
@@ -3813,7 +3863,7 @@ eHalStatus limSendDisassocCnf(tpAniSirGlobal pMac)
                    " isLFR %d"
 #endif
                    " is11r %d reason %d"),
-                   GET_LIM_SYSTEM_ROLE(psessionEntry),
+                   psessionEntry, psessionEntry->peSessionId,
 #ifdef FEATURE_WLAN_ESE
                    psessionEntry->isESEconnection,
 #endif
@@ -3822,6 +3872,8 @@ eHalStatus limSendDisassocCnf(tpAniSirGlobal pMac)
 #endif
                    psessionEntry->is11Rconnection,
                    pMlmDisassocReq->reasonCode););
+            /* Delete FT session if there exists one */
+            limFTCleanupPreAuthInfo(pMac, psessionEntry);
         }
 #endif
         /// Free up buffer allocated for mlmDisassocReq
@@ -3858,11 +3910,13 @@ end:
 
 eHalStatus limDisassocTxCompleteCnf(tpAniSirGlobal pMac, tANI_U32 txCompleteSuccess)
 {
+    limLog(pMac, LOG1, FL("txCompleteSuccess: %d"), txCompleteSuccess);
     return limSendDisassocCnf(pMac);
 }
 
 eHalStatus limDeauthTxCompleteCnf(tpAniSirGlobal pMac, tANI_U32 txCompleteSuccess)
 {
+    limLog(pMac, LOG1, FL("txCompleteSuccess: %d"), txCompleteSuccess);
     return limSendDeauthCnf(pMac);
 }
 
@@ -4005,11 +4059,7 @@ limSendDisassocMgmtFrame(tpAniSirGlobal pMac,
         txFlag |= HAL_USE_BD_RATE2_FOR_MANAGEMENT_FRAME;
     }
 
-    if((psessionEntry->pePersona == VOS_P2P_CLIENT_MODE) ||
-       (psessionEntry->pePersona == VOS_P2P_GO_MODE))
-    {
-        txFlag |= HAL_USE_PEER_STA_REQUESTED_MASK;
-    }
+    txFlag |= HAL_USE_PEER_STA_REQUESTED_MASK;
 
     if (waitForAck)
     {
@@ -4210,11 +4260,7 @@ limSendDeauthMgmtFrame(tpAniSirGlobal pMac,
         txFlag |= HAL_USE_BD_RATE2_FOR_MANAGEMENT_FRAME;
     }
 
-    if((psessionEntry->pePersona == VOS_P2P_CLIENT_MODE) ||
-       (psessionEntry->pePersona == VOS_P2P_GO_MODE))
-    {
-        txFlag |= HAL_USE_PEER_STA_REQUESTED_MASK;
-    }
+    txFlag |= HAL_USE_PEER_STA_REQUESTED_MASK;
 
 #ifdef FEATURE_WLAN_TDLS
     pStaDs = dphLookupHashEntry(pMac, peer, &aid, &psessionEntry->dph.dphHashTable);
