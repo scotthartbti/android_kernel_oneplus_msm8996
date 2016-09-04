@@ -12549,6 +12549,8 @@ static void tasha_cdc_change_cpe_clk(void *data,
 			req_freq = CPE_FLL_CLK_75MHZ;
 		else
 			req_freq = CPE_FLL_CLK_150MHZ;
+	} else {
+		return;
 	}
 
 	dev_dbg(codec->dev,
