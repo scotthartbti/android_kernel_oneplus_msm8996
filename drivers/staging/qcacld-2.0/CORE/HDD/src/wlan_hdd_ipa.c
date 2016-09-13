@@ -2180,7 +2180,7 @@ static int hdd_ipa_send_disconnect(hdd_adapter_t *adapter)
 
 	for (i = 0; i < WLAN_MAX_STA_COUNT; i++) {
 		if (vos_is_macaddr_broadcast(&adapter->aStaInfo[i].macAddrSTA))
-			return ret;
+			continue;
 		if ((adapter->aStaInfo[i].isUsed) &&
 			(!adapter->aStaInfo[i].isDeauthInProgress)) {
 			meta.msg_len = sizeof(struct ipa_wlan_msg);
@@ -3138,6 +3138,9 @@ static void hdd_ipa_w2i_cb(void *priv, enum ipa_dp_evt_type evt,
 	adf_nbuf_t buf;
 
 	hdd_ipa = (struct hdd_ipa_priv *)priv;
+
+	if (!hdd_ipa || wlan_hdd_validate_context(hdd_ipa->hdd_ctx))
+		return;
 
 	switch (evt) {
 	case IPA_RECEIVE:
@@ -4260,7 +4263,7 @@ int hdd_ipa_wlan_evt(hdd_adapter_t *adapter, uint8_t sta_id,
 		if (!hdd_ipa_uc_is_enabled(hdd_ipa)) {
 			HDD_IPA_LOG(VOS_TRACE_LEVEL_INFO,
 				"%s: Evt: %d, IPA UC OFFLOAD NOT ENABLED",
-				msg_ex->name, meta.msg_type);
+				adapter->dev->name, type);
 		} else if ((!hdd_ipa->sap_num_connected_sta) &&
 				(!hdd_ipa->sta_connected)) {
 			/* Enable IPA UC TX PIPE when STA connected */
@@ -4317,7 +4320,7 @@ int hdd_ipa_wlan_evt(hdd_adapter_t *adapter, uint8_t sta_id,
 		if (ret) {
 			HDD_IPA_LOG(VOS_TRACE_LEVEL_ERROR,
 				"%s: Evt: %d, Interface setup failed",
-				msg_ex->name, meta.msg_type);
+				adapter->dev->name, type);
 #ifdef IPA_UC_OFFLOAD
 			vos_lock_release(&hdd_ipa->event_lock);
 #endif /* IPA_UC_OFFLOAD */
@@ -4342,7 +4345,7 @@ int hdd_ipa_wlan_evt(hdd_adapter_t *adapter, uint8_t sta_id,
 		if (!hdd_ipa->sta_connected) {
 			HDD_IPA_LOG(VOS_TRACE_LEVEL_ERROR,
 				"%s: Evt: %d, STA already disconnected",
-				msg_ex->name, meta.msg_type);
+				adapter->dev->name, type);
 			vos_lock_release(&hdd_ipa->event_lock);
 			return -EINVAL;
 		}
@@ -4376,7 +4379,7 @@ int hdd_ipa_wlan_evt(hdd_adapter_t *adapter, uint8_t sta_id,
 		if (!adapter->ipa_context) {
 			HDD_IPA_LOG(VOS_TRACE_LEVEL_ERROR,
 				"%s: Evt: %d, SAP already disconnected",
-				msg_ex->name, meta.msg_type);
+				adapter->dev->name, type);
 			return -EINVAL;
 		}
 
@@ -4422,7 +4425,7 @@ int hdd_ipa_wlan_evt(hdd_adapter_t *adapter, uint8_t sta_id,
 		if (!hdd_ipa_uc_is_enabled(hdd_ipa)) {
 			HDD_IPA_LOG(VOS_TRACE_LEVEL_INFO,
 				"%s: Evt: %d, IPA UC OFFLOAD NOT ENABLED",
-				adapter->dev->name, meta.msg_type);
+				adapter->dev->name, type);
 			return 0;
 		}
 

@@ -551,16 +551,6 @@ enum
 #define CFG_ACTIVE_MIN_CHANNEL_TIME_MAX        ( 10000 )
 #define CFG_ACTIVE_MIN_CHANNEL_TIME_DEFAULT    ( 20 )
 
-#define CFG_ACTIVE_MAX_CHANNEL_TIME_BTC_NAME       "gActiveMaxChannelTimeBtc"
-#define CFG_ACTIVE_MAX_CHANNEL_TIME_BTC_MIN        ( 0 )
-#define CFG_ACTIVE_MAX_CHANNEL_TIME_BTC_MAX        ( 10000 )
-#define CFG_ACTIVE_MAX_CHANNEL_TIME_BTC_DEFAULT    ( 120 )
-
-#define CFG_ACTIVE_MIN_CHANNEL_TIME_BTC_NAME       "gActiveMinChannelTimeBtc"
-#define CFG_ACTIVE_MIN_CHANNEL_TIME_BTC_MIN        ( 0 )
-#define CFG_ACTIVE_MIN_CHANNEL_TIME_BTC_MAX        ( 10000 )
-#define CFG_ACTIVE_MIN_CHANNEL_TIME_BTC_DEFAULT    ( 60 )
-
 #define CFG_RETRY_LIMIT_ZERO_NAME       "gRetryLimitZero"
 #define CFG_RETRY_LIMIT_ZERO_MIN        ( 0 )
 #define CFG_RETRY_LIMIT_ZERO_MAX        ( 15 )
@@ -2259,6 +2249,12 @@ typedef enum
 
 #endif
 
+/* Timer to defer for enabling TDLS on P2P listen (Value in milliseconds) */
+#define CFG_TDLS_ENABLE_DEFER_TIMER                "gTDLSEnableDeferTime"
+#define CFG_TDLS_ENABLE_DEFER_TIMER_MIN            (2000)
+#define CFG_TDLS_ENABLE_DEFER_TIMER_MAX            (6000)
+#define CFG_TDLS_ENABLE_DEFER_TIMER_DEFAULT        (5000)
+
 #ifdef WLAN_ACTIVEMODE_OFFLOAD_FEATURE
 #define CFG_ACTIVEMODE_OFFLOAD_ENABLE         "gEnableActiveModeOffload"
 #define CFG_ACTIVEMODE_OFFLOAD_ENABLE_MIN     ( 0 )
@@ -2685,12 +2681,16 @@ This feature requires the dependent cfg.ini "gRoamPrefer5GHz" set to 1 */
  * 0x1 - Enable mgmt pkt logs (no probe req/rsp).
  * 0x2 - Enable EAPOL pkt logs.
  * 0x4 - Enable DHCP pkt logs.
+ * 0x8 - Enable mgmt. action pkt logs.
+ * 0x10 - Enable ARP packet logs.
+ * 0x20 - Enable ICMPv6 NS packet logs.
+ * 0x40 - Enable ICMPv6 NA packet logs.
  * 0x0 - Disable all the above connection related logs.
  */
 #define CFG_ENABLE_DEBUG_CONNECT_ISSUE             "gEnableDebugLog"
 #define CFG_ENABLE_DEBUG_CONNECT_ISSUE_MIN         (0)
 #define CFG_ENABLE_DEBUG_CONNECT_ISSUE_MAX         (0xFF)
-#define CFG_ENABLE_DEBUG_CONNECT_ISSUE_DEFAULT     (6)
+#define CFG_ENABLE_DEBUG_CONNECT_ISSUE_DEFAULT     (0x76)
 
 /*
  * RX packet handling options
@@ -2979,7 +2979,11 @@ This feature requires the dependent cfg.ini "gRoamPrefer5GHz" set to 1 */
 #endif
 
 #define CFG_MAX_CONCURRENT_CONNECTIONS_NAME        "gMaxConcurrentActiveSessions"
+#ifdef WLAN_4SAP_CONCURRENCY
+#define CFG_MAX_CONCURRENT_CONNECTIONS_DEFAULT     ( 4 )
+#else
 #define CFG_MAX_CONCURRENT_CONNECTIONS_DEFAULT     ( 2 )
+#endif
 #define CFG_MAX_CONCURRENT_CONNECTIONS_MIN         ( 1 )
 #define CFG_MAX_CONCURRENT_CONNECTIONS_MAX         ( 4 )
 
@@ -3991,6 +3995,59 @@ enum dot11p_mode {
 #define CFG_SIFS_BURST_DURATION_MAX      (12)
 #define CFG_SIFS_BURST_DURATION_DEFAULT  (8)
 
+/*
+ * 0: Disable BPF packet filter
+ * 1: Enable BPF packet filter
+ */
+#define CFG_BPF_PACKET_FILTER_OFFLOAD           "gBpfFilterEnable"
+#define CFG_BPF_PACKET_FILTER_OFFLOAD_MIN       (0)
+#define CFG_BPF_PACKET_FILTER_OFFLOAD_MAX       (1)
+#define CFG_BPF_PACKET_FILTER_OFFLOAD_DEFAULT   (1)
+
+/*
+ * GPIO num used to wakeup host, 0xFF disable wakeup.
+ * Default value is 0xFF
+ */
+#define CFG_HOST_WAKEUP_GPIO_NAME        "g_host_wakeup_gpio"
+#define CFG_HOST_WAKEUP_GPIO_MIN         (0)
+#define CFG_HOST_WAKEUP_GPIO_MAX         (0xFF)
+#define CFG_HOST_WAKEUP_GPIO_DEFAULT     (0xFF)
+
+/*
+ * Wakeup type for host.
+ * 1 Low level
+ * 2 High level
+ * 3 Rising edge
+ * 4 Falling edge
+ * Default value is 1.
+ */
+#define CFG_HOST_WAKEUP_TYPE_NAME        "g_host_wakeup_type"
+#define CFG_HOST_WAKEUP_TYPE_MIN         (1)
+#define CFG_HOST_WAKEUP_TYPE_MAX         (4)
+#define CFG_HOST_WAKEUP_TYPE_DEFAULT     (1)
+
+/*
+ * GPIO number used to wakeup target, 0xFF disable wakeup.
+ * Default value is 0xFF
+ */
+#define CFG_TARGET_WAKEUP_GPIO_NAME       "g_target_wakeup_gpio"
+#define CFG_TARGET_WAKEUP_GPIO_MIN        (0)
+#define CFG_TARGET_WAKEUP_GPIO_MAX        (0xFF)
+#define CFG_TARGET_WAKEUP_GPIO_DEFAULT    (0xFF)
+
+/*
+ * Wakeup type for host.
+ * 1 Low level
+ * 2 High level
+ * 3 Rising edge
+ * 4 Falling edge
+ * Default value is 1.
+ */
+#define CFG_TARGET_WAKEUP_TYPE_NAME       "g_target_wakeup_type"
+#define CFG_TARGET_WAKEUP_TYPE_MIN        (1)
+#define CFG_TARGET_WAKEUP_TYPE_MAX        (4)
+#define CFG_TARGET_WAKEUP_TYPE_DEFAULT    (1)
+
 /*---------------------------------------------------------------------------
   Type declarations
   -------------------------------------------------------------------------*/
@@ -4117,8 +4174,6 @@ struct hdd_config {
    v_U32_t        nInitialDwellTime;     //in units of milliseconds
    bool           initial_scan_no_dfs_chnl;
 
-   v_U32_t        nActiveMinChnTimeBtc;     //in units of milliseconds
-   v_U32_t        nActiveMaxChnTimeBtc;     //in units of milliseconds
 #ifdef WLAN_AP_STA_CONCURRENCY
    v_U32_t        nPassiveMinChnTimeConc;    //in units of milliseconds
    v_U32_t        nPassiveMaxChnTimeConc;    //in units of milliseconds
@@ -4774,6 +4829,14 @@ struct hdd_config {
    bool                        active_mode_offload;
    /* parameter for indicating sifs burst duration to fw */
    uint8_t                     sifs_burst_duration;
+
+   bool                        bpf_packet_filter_enable;
+   /* parameter for defer timer for enabling TDLS on p2p listen */
+   uint16_t                    tdls_enable_defer_time;
+   uint32_t                    host_wakeup_gpio;
+   uint32_t                    host_wakeup_type;
+   uint32_t                    target_wakeup_gpio;
+   uint32_t                    target_wakeup_type;
 };
 
 typedef struct hdd_config hdd_config_t;

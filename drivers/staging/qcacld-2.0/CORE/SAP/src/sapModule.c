@@ -1666,7 +1666,8 @@ WLANSAP_SetChannelChangeWithCsa(v_PVOID_t pvosGCtx, v_U32_t targetChannel)
          /*
           * validate target channel switch w.r.t various concurrency rules set.
           */
-         valid = sme_validate_sap_channel_switch(VOS_GET_HAL_CB(sapContext->pvosGCtx),
+         valid = sap_channel_switch_validate(sapContext,
+                  VOS_GET_HAL_CB(sapContext->pvosGCtx),
                   targetChannel, sapContext->csrRoamProfile.phyMode,
                   sapContext->cc_switch_mode, sapContext->sessionId);
          if (!valid)
@@ -3791,7 +3792,7 @@ WLANSAP_ACS_CHSelect(v_PVOID_t pvosGCtx,
     pMac = PMAC_STRUCT( hHal );
     sapContext->acs_cfg = &pConfig->acs_cfg;
     sapContext->csrRoamProfile.phyMode = sapContext->acs_cfg->hw_mode;
-
+    sapContext->target_band = pConfig->target_band;
         /*
          * Copy the HDD callback function to report the
          * ACS result after scan in SAP context callback function.
@@ -3825,7 +3826,7 @@ WLANSAP_ACS_CHSelect(v_PVOID_t pvosGCtx,
 
         if (VOS_STATUS_E_ABORTED == vosStatus) {
             VOS_TRACE( VOS_MODULE_ID_SAP, VOS_TRACE_LEVEL_ERROR,
-                       "In %s,DFS not supported in the current operating mode",
+                       "In %s, acs configuration not supported",
                         __func__);
             return VOS_STATUS_E_FAILURE;
         }
@@ -3913,6 +3914,31 @@ wlansap_get_chan_width(void *pvosctx, uint32_t *pchanwidth)
 	ptSapContext sapcontext;
 	sapcontext = VOS_GET_SAP_CB(pvosctx);
 	*pchanwidth = wlan_sap_get_vht_ch_width(sapcontext);
+
+	return VOS_STATUS_SUCCESS;
+}
+
+/*
+ * wlansap_set_invalid_session() - set session ID to invalid
+ * @pctx: pointer of global context
+ *
+ * This function sets session ID to invalid
+ *
+ * Return: VOS_STATUS
+ */
+VOS_STATUS
+wlansap_set_invalid_session(v_PVOID_t pctx)
+{
+	ptSapContext psapctx;
+	psapctx = VOS_GET_SAP_CB(pctx);
+	if ( NULL == psapctx) {
+		VOS_TRACE( VOS_MODULE_ID_SAP, VOS_TRACE_LEVEL_ERROR,
+			FL("Invalid SAP pointer from pctx"));
+		return VOS_STATUS_E_FAILURE;
+	}
+
+	psapctx->sessionId = CSR_SESSION_ID_INVALID;
+	psapctx->isSapSessionOpen = eSAP_FALSE;
 
 	return VOS_STATUS_SUCCESS;
 }

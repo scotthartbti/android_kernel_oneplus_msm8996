@@ -1722,6 +1722,15 @@ typedef struct sSirSmeDeauthCnf
     tSirMacAddr        peerMacAddr;
 } tSirSmeDeauthCnf, *tpSirSmeDeauthCnf;
 
+/* Definition for disconnect done indication */
+typedef struct sSirSmeDisConDoneInd {
+   tANI_U16           messageType;
+   tANI_U16           length;
+   tANI_U8            sessionId;
+   tSirResultCodes    reasonCode;
+   tSirMacAddr        peerMacAddr;
+} tSirSmeDisConDoneInd, *tpSirSmeDisConDoneInd;
+
 /// Definition for stop BSS request message
 typedef struct sSirSmeStopBssReq
 {
@@ -4040,7 +4049,7 @@ typedef struct sSirTxPerTrackingParam
 #define    SIR_IPV4_ADDR_LEN                 4
 #define    SIR_MAC_ADDR_LEN                  6
 #define    SIR_MAX_FILTER_TEST_DATA_LEN       8
-#define    SIR_MAX_NUM_MULTICAST_ADDRESS    240
+#define    SIR_MAX_NUM_MULTICAST_ADDRESS    16
 #define    SIR_MAX_NUM_FILTERS               20
 #define    SIR_MAX_NUM_TESTS_PER_FILTER      10
 
@@ -4333,6 +4342,7 @@ typedef struct
     tANI_U16            transactionId; // Transaction ID for cmd
     tSirResultCodes        statusCode;
     tSirMacAddr            peerMac;
+    uint16_t            sta_idx;
 }tSirTdlsLinkEstablishReqRsp, *tpSirTdlsLinkEstablishReqRsp;
 
 /* TDLS Request struct SME-->PE */
@@ -4404,6 +4414,7 @@ typedef struct sSirActiveModeSetBcnFilterReq
    tANI_U16               messageType;
    tANI_U16               length;
    tANI_U8                seesionId;
+   tSirMacAddr            bssid;
 } tSirSetActiveModeSetBncFilterReq, *tpSirSetActiveModeSetBncFilterReq;
 
 //Reset AP Caps Changed
@@ -6758,6 +6769,23 @@ struct wow_pulse_mode {
 	uint8_t                    wow_pulse_pin;
 	uint16_t                   wow_pulse_interval_high;
 	uint16_t                   wow_pulse_interval_low;
+};
+
+/*
+ * struct wakeup_gpio_mode
+ * @host_wakeup_gpio: GPIO num used to wakeup host
+ * @host_wakeup_type: Wakeup type for host. Refer to WMI_WAKE_GPIO_TYPE
+ * @target_wakeup_gpio: GPIO num used to wakeup target
+ * @target_wakeup_type: Wakeup type for target. Refer to WMI_WAKE_GPIO_TYPE
+ *
+ * SME uses this structure to configure wakeup gpio info
+ * and send it to WMA
+ */
+struct wakeup_gpio_mode {
+	uint32_t     host_wakeup_gpio;
+	uint32_t     host_wakeup_type;
+	uint32_t     target_wakeup_gpio;
+	uint32_t     target_wakeup_type;
 };
 
 /*

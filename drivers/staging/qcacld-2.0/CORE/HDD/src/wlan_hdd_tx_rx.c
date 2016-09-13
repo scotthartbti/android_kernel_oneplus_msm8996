@@ -174,21 +174,17 @@ void hdd_flush_ibss_tx_queues( hdd_adapter_t *pAdapter, v_U8_t STAId)
       list_for_each_safe(tmp, next, &pAdapter->wmm_tx_queue[i].anchor)
       {
          pktNode = list_entry(tmp, skb_list_node_t, anchor);
-         if (pktNode != NULL)
-         {
-            skb = pktNode->skb;
+         skb = pktNode->skb;
 
-            /* Get the STAId from data */
-            skbStaIdx = *(v_U8_t *)(((v_U8_t *)(skb->data)) - 1);
-            if (skbStaIdx == STAId)
-            {
-               /* Data for STAId is freed along with the queue node */
+         /* Get the STAId from data */
+         skbStaIdx = *(v_U8_t *)(((v_U8_t *)(skb->data)) - 1);
+         if (skbStaIdx == STAId) {
+            /* Data for STAId is freed along with the queue node */
 
-               list_del(tmp);
-               kfree_skb(skb);
+            list_del(tmp);
+            kfree_skb(skb);
 
-               pAdapter->wmm_tx_queue[i].count--;
-            }
+            pAdapter->wmm_tx_queue[i].count--;
          }
       }
 
@@ -500,6 +496,25 @@ int __hdd_hard_start_xmit(struct sk_buff *skb, struct net_device *dev)
        pDestMacAddress = (v_MACADDR_t*)skb->data;
        STAId = HDD_WLAN_INVALID_STA_ID;
 
+/*
+* The TCP TX throttling logic is changed a little after 3.19-rc1 kernel,
+* the TCP sending limit will be smaller, which will throttle the TCP packets
+* to the host driver. The TCP UP LINK throughput will drop heavily.
+* In order to fix this issue, need to orphan the socket buffer asap, which will
+* call skb's destructor to notify the TCP stack that the SKB buffer is
+* unowned. And then the TCP stack will pump more packets to host driver.
+*
+* The TX packets might be dropped for UDP case in the iperf testing.
+* So need to be protected by follow control.
+*/
+#ifdef QCA_LL_TX_FLOW_CT
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(3,19,0))
+      if (pAdapter->tx_flow_low_watermark > 0) {
+          skb_orphan(skb);
+      }
+#endif
+#endif
+
        hdd_get_transmit_sta_id(pAdapter, pDestMacAddress, &STAId);
        if (STAId == HDD_WLAN_INVALID_STA_ID) {
            hddLog(LOGE, "Invalid station id, transmit operation suspended");
@@ -621,13 +636,24 @@ int __hdd_hard_start_xmit(struct sk_buff *skb, struct net_device *dev)
        {
            proto_type = vos_pkt_get_proto_type(skb,
                         hddCtxt->cfg_ini->gEnableDebugLog, 0);
-           if (VOS_PKT_TRAC_TYPE_EAPOL & proto_type)
-           {
+           switch (proto_type) {
+           case VOS_PKT_TRAC_TYPE_EAPOL:
                vos_pkt_trace_buf_update("ST:T:EPL");
-           }
-           else if (VOS_PKT_TRAC_TYPE_DHCP & proto_type)
-           {
+               break;
+           case VOS_PKT_TRAC_TYPE_DHCP:
                hdd_dhcp_pkt_trace_buf_update(skb, TX_PATH, STA);
+               break;
+           case VOS_PKT_TRAC_TYPE_ARP:
+               vos_pkt_trace_buf_update("ST:T:ARP");
+               break;
+           case VOS_PKT_TRAC_TYPE_NS:
+               vos_pkt_trace_buf_update("ST:T:NS");
+               break;
+           case VOS_PKT_TRAC_TYPE_NA:
+               vos_pkt_trace_buf_update("ST:T:NA");
+               break;
+           default:
+               break;
            }
        }
 #endif /* QCA_PKT_PROTO_TRACE */
@@ -1250,10 +1276,25 @@ VOS_STATUS hdd_rx_packet_cbk(v_VOID_t *vosContext,
           (pHddCtx->cfg_ini->gEnableDebugLog & VOS_PKT_TRAC_TYPE_DHCP)) {
          proto_type = vos_pkt_get_proto_type(skb,
                         pHddCtx->cfg_ini->gEnableDebugLog, 0);
-         if (VOS_PKT_TRAC_TYPE_EAPOL & proto_type)
-            vos_pkt_trace_buf_update("ST:R:EPL");
-         else if (VOS_PKT_TRAC_TYPE_DHCP & proto_type)
-            hdd_dhcp_pkt_trace_buf_update(skb, RX_PATH, STA);
+         switch (proto_type) {
+         case VOS_PKT_TRAC_TYPE_EAPOL:
+             vos_pkt_trace_buf_update("ST:R:EPL");
+             break;
+         case VOS_PKT_TRAC_TYPE_DHCP:
+             hdd_dhcp_pkt_trace_buf_update(skb, RX_PATH, STA);
+             break;
+         case VOS_PKT_TRAC_TYPE_ARP:
+             vos_pkt_trace_buf_update("ST:R:ARP");
+             break;
+         case VOS_PKT_TRAC_TYPE_NS:
+             vos_pkt_trace_buf_update("ST:R:NS");
+             break;
+         case VOS_PKT_TRAC_TYPE_NA:
+             vos_pkt_trace_buf_update("ST:R:NA");
+             break;
+         default:
+             break;
+         }
       }
 #endif /* QCA_PKT_PROTO_TRACE */
 

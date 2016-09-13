@@ -1634,8 +1634,8 @@ enum {
 };
 
 /** NOTE: This defs cannot be changed in the future without breaking WMI compatibility */
-#define WMI_MAX_NUM_SS                    8
-#define WMI_MAX_NUM_RU                    4
+#define WMI_MAX_NUM_SS                    MAX_HE_NSS
+#define WMI_MAX_NUM_RU                    MAX_HE_RU
 
 /*
  * Figure 8 554ae: -PPE Threshold Info field format
@@ -4911,7 +4911,11 @@ typedef struct
  */
 typedef struct
 {
-    A_UINT32 tlv_header; /** TLV tag and len; tag equals WMITLV_TAG_STRUC_wmi_peer_signal_stats */
+    /**
+     * TLV tag and len; tag equals
+     * WMITLV_TAG_STRUC_wmi_peer_signal_stats_thresh
+     */
+    A_UINT32 tlv_header;
     A_UINT32 per_ant_snr; /* units = dB */
     A_UINT32 nf; /* units = dBm */
 } wmi_peer_signal_stats_thresh;
@@ -5374,6 +5378,157 @@ typedef struct {
  */
 #define WMI_UNIFIED_VDEV_START_BCN_TX_RATE_PRESENT (1<<2)
 
+#define WMI_HEOPS_COLOR_GET(he_ops) WMI_GET_BITS(he_ops, 0, 6)
+#define WMI_HEOPS_COLOR_SET(he_ops, value) WMI_SET_BITS(he_ops, 0, 6, value)
+
+#define WMI_HEOPS_DEFPE_GET(he_ops) WMI_GET_BITS(he_ops, 6, 3)
+#define WMI_HEOPS_DEFPE_SET(he_ops, value) WMI_SET_BITS(he_ops, 6, 3, value)
+
+#define WMI_HEOPS_TWT_GET(he_ops) WMI_GET_BITS(he_ops, 9, 1)
+#define WMI_HEOPS_TWT_SET(he_ops, value) WMI_SET_BITS(he_ops, 9, 1, value)
+
+#define WMI_HEOPS_RTSTHLD_GET(he_ops) WMI_GET_BITS(he_ops, 10, 7)
+#define WMI_HEOPS_RTSTHLD_SET(he_ops, value) WMI_SET_BITS(he_ops, 10, 7, value)
+
+#define WMI_HEOPS_PDMIN_GET(he_ops) WMI_GET_BITS(he_ops, 17, 5)
+#define WMI_HEOPS_PDMIN_SET(he_ops, value) WMI_SET_BITS(he_ops, 17, 5, value)
+
+#define WMI_HEOPS_PDMAX_GET(he_ops) WMI_GET_BITS(he_ops, 22, 5)
+#define WMI_HEOPS_PDMAX_SET(he_ops, value) WMI_SET_BITS(he_ops, 22, 5, value)
+
+#define WMI_MAX_HECAP_PHY_SIZE                 (3)
+#define WMI_HECAP_PHY_COD_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[0], 0, 1)
+#define WMI_HECAP_PHY_COD_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[0], 0, 1, value)
+
+#define WMI_HECAP_PHY_TXLDPC_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[0], 1, 1)
+#define WMI_HECAP_PHY_TXLDPC_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[0], 1, 1, value)
+
+#define WMI_HECAP_PHY_RXLDPC_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[0], 2, 1)
+#define WMI_HECAP_PHY_RXLDPC_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[0], 2, 1, value)
+
+#define WMI_HECAP_PHY_DCM_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[0], 3, 3)
+#define WMI_HECAP_PHY_DCM_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[0], 3, 3, value)
+
+#define WMI_HECAP_PHY_OLTF_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[0], 6, 1)
+#define WMI_HECAP_PHY_OLTF_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[0], 6, 1, value)
+
+#define WMI_HECAP_PHY_CBW_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[0], 7, 3)
+#define WMI_HECAP_PHY_CBW_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[0], 7, 3, value)
+
+#define WMI_HECAP_PHY_TXSTBC_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[0], 10, 1)
+#define WMI_HECAP_PHY_TXSTBC_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[0], 10, 1, value)
+
+#define WMI_HECAP_PHY_RXSTBC_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[0], 11, 1)
+#define WMI_HECAP_PHY_RXSTBC_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[0], 11, 1, value)
+
+#define WMI_HECAP_PHY_DLOFMAMUMIMO_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[0], 12, 1)
+#define WMI_HECAP_PHY_DLOFDMAMUMIO_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[0], 12, 1, value)
+
+#define WMI_HECAP_PHY_UL_MU_MIMO_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[0], 13, 1)
+#define WMI_HECAP_PHY_UL_MU_MIMO_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[0], 13, 1, value)
+
+#define WMI_HECAP_PHY_ULOFDMA_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[0], 14, 1)
+#define WMI_HECAP_PHY_ULOFDMA_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[0], 14, 1, value)
+
+#define WMI_HECAP_PHY_TXDOPPLER_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[0], 15, 1)
+#define WMI_HECAP_PHY_TXDOPPLER_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[0], 15, 1, value)
+
+#define WMI_HECAP_PHY_RXDOPPLER_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[0], 16, 1)
+#define WMI_HECAP_PHY_RXDOPPLER_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[0], 16, 1, value)
+
+#define WMI_HECAP_PHY_CBMODE_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[0], 17, 8)
+#define WMI_HECAP_PHY_CBMODE_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[0], 17, 8, value)
+
+#define WMI_HECAP_PHY_PADDING_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[0], 25, 2)
+#define WMI_HECAP_PHY_PADDING_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[0], 25, 2, value)
+
+#define WMI_HECAP_PHY_32GI_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[1], 0, 26)
+#define WMI_HECAP_PHY_32GI_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[1], 0, 26, value)
+
+#define WMI_HECAP_PHY_SUBFMR_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[1], 26, 1)
+#define WMI_HECAP_PHY_SUBFMR_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[1], 26, 1, value)
+
+#define WMI_HECAP_PHY_SUBFME_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[1], 27, 1)
+#define WMI_HECAP_PHY_SUBFME_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[1], 27, 1, value)
+
+#define WMI_HECAP_PHY_SUBFMESTS_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[1], 28, 3)
+#define WMI_HECAP_PHY_SUBFMESTS_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[1], 28, 3, value)
+
+#define WMI_HECAP_PHY_NOSUNDIMENS_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[2], 0, 3)
+#define WMI_HECAP_PHY_NOSUNDIMENS_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[2], 0, 3, value)
+
+#define WMI_HECAP_PHY_MUBFMR_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[2], 3, 1)
+#define WMI_HECAP_PHY_MUBFMR_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[2], 3, 1, value)
+
+#define WMI_HECAP_PHY_40MHZNSS_GET(he_cap_phy) WMI_GET_BITS(he_cap_phy[2], 4, 18)
+#define WMI_HECAP_PHY_40MHZNSS_SET(he_cap_phy, value) WMI_SET_BITS(he_cap_phy[2], 4, 18, value)
+
+#define WMI_HECAP_MAC_MTID_GET(he_cap) WMI_GET_BITS(he_cap, 0, 3)
+#define WMI_HECAP_MAC_MTID_SET(he_cap, value) WMI_SET_BITS(he_cap, 0, 3, value)
+
+#define WMI_HECAP_MAC_AACK_GET(he_cap) WMI_GET_BITS(he_cap, 3, 1)
+#define WMI_HECAP_MAC_AACK_SET(he_cap, value) WMI_SET_BITS(he_cap, 3, 1, value)
+
+#define WMI_HECAP_MAC_MINFRAGSZ_GET(he_cap) WMI_GET_BITS(he_cap, 4, 2)
+#define WMI_HECAP_MAC_MINFRAGSZ_SET(he_cap, value) WMI_SET_BITS(he_cap, 4, 2, value)
+
+#define WMI_HECAP_MAC_HEFRAG_GET(he_cap) WMI_GET_BITS(he_cap, 6, 2)
+#define WMI_HECAP_MAC_HEFRAG_SET(he_cap, value) WMI_SET_BITS(he_cap, 6, 2, value)
+
+#define WMI_HECAP_MAC_MURTS_GET(he_cap) WMI_GET_BITS(he_cap, 8, 1)
+#define WMI_HECAP_MAC_MURTS_SET(he_cap, value) WMI_SET_BITS(he_cap, 8, 1, value)
+
+#define WMI_HECAP_MAC_OMI_GET(he_cap) WMI_GET_BITS(he_cap, 9, 1)
+#define WMI_HECAP_MAC_OMI_SET(he_cap, value) WMI_SET_BITS(he_cap, 9, 1, value)
+
+#define WMI_HECAP_MAC_HECTRL_GET(he_cap) WMI_GET_BITS(he_cap, 10, 1)
+#define WMI_HECAP_MAC_HECTRL_SET(he_cap, value) WMI_SET_BITS(he_cap, 10, 1, value)
+
+#define WMI_HECAP_MAC_MBAHECTRL_GET(he_cap) WMI_GET_BITS(he_cap, 11, 1)
+#define WMI_HECAP_MAC_MBAHECTRL_SET(he_cap, value) WMI_SET_BITS(he_cap, 11, 1, value)
+
+#define WMI_HECAP_MAC_ULMURSP_GET(he_cap) WMI_GET_BITS(he_cap, 12, 1)
+#define WMI_HECAP_MAC_ULMURSP_SET(he_cap, value) WMI_SET_BITS(he_cap, 12, 1, value)
+
+#define WMI_HECAP_MAC_HELKAD_GET(he_cap) WMI_GET_BITS(he_cap, 13, 2)
+#define WMI_HECAP_MAC_HELKAD_SET(he_cap, value) WMI_SET_BITS(he_cap, 13, 2, value)
+
+#define WMI_HECAP_MAC_BSR_GET(he_cap) WMI_GET_BITS(he_cap, 15, 1)
+#define WMI_HECAP_MAC_BSR_SET(he_cap, value) WMI_SET_BITS(he_cap, 15, 1, value)
+
+#define WMI_HECAP_MAC_TWTREQ_GET(he_cap) WMI_GET_BITS(he_cap, 16, 1)
+#define WMI_HECAP_MAC_TWTREQ_SET(he_cap, value) WMI_SET_BITS(he_cap, 16, 1, value)
+
+#define WMI_HECAP_MAC_TWTRSP_GET(he_cap) WMI_GET_BITS(he_cap, 17, 1)
+#define WMI_HECAP_MAC_TWTRSP_SET(he_cap, value) WMI_SET_BITS(he_cap, 17, 1, value)
+
+#define WMI_HECAP_MAC_BCSTTWT_GET(he_cap) WMI_GET_BITS(he_cap, 18, 1)
+#define WMI_HECAP_MAC_BCSTTWT_SET(he_cap, value) WMI_SET_BITS(he_cap, 18, 1, value)
+
+#define WMI_HECAP_MAC_MBSS_GET(he_cap) WMI_GET_BITS(he_cap, 19, 1)
+#define WMI_HECAP_MAC_MBSS_SET(he_cap, value) WMI_SET_BITS(he_cap, 19, 1, value)
+
+#define WMI_HECAP_MAC_TRIGPADDUR_GET(he_cap) WMI_GET_BITS(he_cap, 20, 2)
+#define WMI_HECAP_MAC_TRIGPADDUR_SET(he_cap, value) WMI_SET_BITS(he_cap, 20, 2, value)
+
+#define WMI_HECAP_MAC_MAXFRAGMSDU_GET(he_cap) WMI_GET_BITS(he_cap, 22, 3)
+#define WMI_HECAP_MAC_MAXFRAGMSDU_SET(he_cap, value) WMI_SET_BITS(he_cap, 22, 3, value)
+
+#define WMI_HECAP_MAC_32BITBA_GET(he_cap) WMI_GET_BITS(he_cap, 25, 1)
+#define WMI_HECAP_MAC_32BITBA_SET(he_cap, value) WMI_SET_BITS(he_cap, 25, 1, value)
+
+#define WMI_HECAP_MAC_MUCASCADE_GET(he_cap) WMI_GET_BITS(he_cap, 26, 1)
+#define WMI_HECAP_MAC_MUCASCADE_SET(he_cap, value) WMI_SET_BITS(he_cap, 26, 1, value)
+
+#define WMI_HECAP_MAC_ACKMTIDAMPDU_GET(he_cap) WMI_GET_BITS(he_cap, 27, 1)
+#define WMI_HECAP_MAC_ACKMTIDAMPDU_SET(he_cap, value) WMI_SET_BITS(he_cap, 27, 1, value)
+
+#define WMI_HECAP_MAC_GROUPMSTABA_GET(he_cap) WMI_GET_BITS(he_cap, 28, 1)
+#define WMI_HECAP_MAC_GROUPMSTABA_SET(he_cap, value) WMI_SET_BITS(he_cap, 28, 1, value)
+
+#define WMI_HECAP_MAC_OFDMARA_GET(he_cap) WMI_GET_BITS(he_cap, 29, 1)
+#define WMI_HECAP_MAC_OFDMARA_SET(he_cap, value) WMI_SET_BITS(he_cap, 29, 1, value)
+
 typedef struct {
     A_UINT32 tlv_header;     /** TLV tag and len; tag equals WMITLV_TAG_STRUC_wmi_vdev_start_request_cmd_fixed_param */
     /** unique id identifying the VDEV, generated by the caller */
@@ -5407,6 +5562,7 @@ typedef struct {
     /** This field will be invalid unless the Dual Band Simultaneous (DBS) feature is enabled. */
     /** the DBS policy manager indicates the preferred number of receive streams. */
     A_UINT32 preferred_rx_streams;
+    A_UINT32 he_ops; /* refer to WMI_HEOPS_xxx macros */
 
     /* The TLVs follows this structure:
          *     wmi_channel chan;   //WMI channel
@@ -5909,24 +6065,20 @@ typedef enum {
     WMI_VDEV_PARAM_PROTOTYPE = 0x8000,
     /* 11AX SPECIFIC defines */
     WMI_VDEV_PARAM_BSS_COLOR,
-    /* In case of AP this will enable / disable MU-MIMO mode */
-    WMI_VDEV_PARAM_SET_UL_MU_MIMO,
     /*
-     * set fragmentation level of the vdev's peers.
-     * Values can be WMI_HE_FRAG_SUPPORT_LEVEL0..WMI_HE_FRAG_SUPPORT_LEVEL3
-     */
-    WMI_VDEV_PARAM_SET_FRAG_LEVEL,
-    /*
-     * control different features of HEControl:
-     *     Bit 0:- 1/0-> Enable/Disable transmssion of UL scheduling.
-     *     Bit 1:- 1/0-> Enable / disable honoring of ROMI from a peer.
-     *                   Applicable in AP mode only.
-     */
-    WMI_VDEV_PARAM_SET_HECONTROL,
-    /*
-     * enable / disable trigger access for a AP vdev's peers.
+     * Enable / disable trigger access for a AP vdev's peers.
      * For a STA mode vdev this will enable/disable triggered access
      * and enable/disable Multi User mode of operation.
+     * 0 - Disable MU OFDMA and MU MIMO
+     * 1 - Disable DL OFDMA
+     * 2 - Disable DL MUMIMO
+     * 3 - Disable UL OFDMA
+     * 4 - Disable UL MUMIMO
+     * 5 - Enable MU OFDMA and MU MIMO
+     * 6 - Enable DL OFDMA
+     * 7 - Enable DL MUMIMO
+     * 8 - Enable UL OFDMA
+     * 9 - Enable UL MUMIMO
      */
     WMI_VDEV_PARAM_SET_HEMU_MODE,
     /*
@@ -7208,6 +7360,7 @@ typedef struct {
 #define WMI_PEER_QOS            0x00000002  /* QoS enabled */
 #define WMI_PEER_NEED_PTK_4_WAY 0x00000004  /* Needs PTK 4 way handshake for authorization */
 #define WMI_PEER_NEED_GTK_2_WAY 0x00000010  /* Needs GTK 2 way handshake after 4-way handshake */
+#define WMI_PEER_HE             0x00000400  /* HE Enabled */
 #define WMI_PEER_APSD           0x00000800  /* U-APSD power save enabled */
 #define WMI_PEER_HT             0x00001000  /* HT enabled */
 #define WMI_PEER_40MHZ          0x00002000  /* 40MHz enabld */
@@ -7308,8 +7461,10 @@ typedef struct {
     wmi_ppe_threshold peer_ppet;
     A_UINT32 peer_he_cap_info; /* protocol-defined HE / 11ax capability flags */
     A_UINT32 peer_he_ops; /* HE operation contains BSS color */
+    A_UINT32 peer_he_cap_phy[WMI_MAX_HECAP_PHY_SIZE];
+    A_UINT32 peer_he_mcs; /* HE MCS/NSS set */
 
-    /* Following this struc are the TLV's:
+    /* Following this struct are the TLV's:
          *     A_UINT8 peer_legacy_rates[];
          *     A_UINT8 peer_ht_rates[];
          *     wmi_vht_rate_set peer_vht_rates; //VHT capabilties of the peer
@@ -13653,6 +13808,11 @@ typedef struct {
     A_UINT32 channel_count;
     A_UINT32 schedule_size;
     A_UINT32 flags;
+    /**
+     * Max duration of continuing multichannel operation without
+     * receiving a TA frame (units = seconds)
+     */
+    A_UINT32 ta_max_duration;
 
     /** This is followed by a TLV array of wmi_channel. */
     /** This is followed by a TLV array of wmi_ocb_channel. */
@@ -15851,6 +16011,35 @@ typedef enum {
     WLAN_5G_CAPABILITY = 0x2,
 } WLAN_BAND_CAPABILITY;
 
+typedef enum wmi_hw_mode_config_type {
+	/* Only one PHY is active. */
+	WMI_HW_MODE_SINGLE      = 0,
+	/**
+	 * Both PHYs are active in different bands, one in 2G
+	 * and another in 5G.
+	 */
+	WMI_HW_MODE_DBS         = 1,
+	/**
+	 * Both PHYs are in passive mode (only rx) in same band;
+	 * no tx allowed.
+	 */
+	WMI_HW_MODE_SBS_PASSIVE = 2,
+	/**
+	 * Both PHYs are active in the same band.
+	 * Support for both PHYs within one band is planned for 5G only
+	 * (as indicated in WMI_MAC_PHY_CAPABILITIES),
+	 * but could be extended to other bands in the future.
+	 * The separation of the band between the two PHYs needs to be
+	 * communicated separately.
+	 */
+	WMI_HW_MODE_SBS         = 3,
+	/**
+	 * 3 PHYs, with 2 on the same band doing SBS
+	 * as in WMI_HW_MODE_SBS, and 3rd on the other band
+	 */
+	WMI_HW_MODE_DBS_SBS     = 4,
+} WMI_HW_MODE_CONFIG_TYPE;
+
 #define WMI_SUPPORT_11B_GET(flags) WMI_GET_BITS(flags, 0, 1)
 #define WMI_SUPPORT_11B_SET(flags, value) WMI_SET_BITS(flags, 0, 1, value)
 
@@ -15869,6 +16058,9 @@ typedef enum {
 #define WMI_SUPPORT_11AX_GET(flags) WMI_GET_BITS(flags, 5, 1)
 #define WMI_SUPPORT_11AX_SET(flags, value) WMI_SET_BITS(flags, 5, 1, value)
 
+#define WMI_MAX_MUBFEE_GET(flags) WMI_GET_BITS(flags, 28, 4)
+#define WMI_MAX_MUBFEE_SET(flags, value) WMI_SET_BITS(flags, 28, 4, value)
+
 typedef struct {
     A_UINT32 tlv_header; /* TLV tag and len; tag equals WMITLV_TAG_STRUC_WMI_MAC_PHY_CAPABILITIES */
     /* hw_mode_id - identify a particular set of HW characteristics, as specified
@@ -15881,7 +16073,7 @@ typedef struct {
     A_UINT32 pdev_id;
     /* phy id. Starts with 0 */
     A_UINT32 phy_id;
-    /* supported modulations */
+    /* supported modulations and number of MU beamformees */
     union {
         struct {
             A_UINT32 supports_11b:1,
@@ -15889,7 +16081,12 @@ typedef struct {
                      supports_11a:1,
                      supports_11n:1,
                      supports_11ac:1,
-                     supports_11ax:1;
+                     supports_11ax:1,
+
+                     unused:22,
+
+                     /* max MU beamformees supported per MAC */
+                     max_mubfee:4;
         };
         A_UINT32 supported_flags;
     };
@@ -15940,6 +16137,11 @@ typedef struct {
     A_UINT32 tx_chain_mask_5G;
     /* Valid Receive chain mask */
     A_UINT32 rx_chain_mask_5G;
+    /* HE capability phy field of 802.11ax, WMI_HE_CAP defines */
+    A_UINT32 he_cap_phy_info_2G[WMI_MAX_HECAP_PHY_SIZE];
+    A_UINT32 he_cap_phy_info_5G[WMI_MAX_HECAP_PHY_SIZE];
+    wmi_ppe_threshold he_ppet2G;
+    wmi_ppe_threshold he_ppet5G;
 } WMI_MAC_PHY_CAPABILITIES;
 
 typedef struct {
@@ -15947,12 +16149,21 @@ typedef struct {
     /* hw_mode_id - identify a particular set of HW characteristics,
      * as specified by the subsequent fields */
     A_UINT32 hw_mode_id;
-    /* BIT0 represents phy_id 0, BIT1 represent phy_id 1 and so on */
+    /**
+     * BIT0 represents phy_id 0, BIT1 represent phy_id 1 and so on.
+     * Number of bits set in phy_id_map represents number of
+     * WMI_MAC_PHY_CAPABILITIES TLV's, one for each active PHY for current HW
+     * mode identified by hw_mode_id. For example, for DBS/SBS mode there will
+     * be 2 WMI_MAC_PHY_CAPABILITIES TLVs and for single MAC modes it will be
+     * 1 WMI_MAC_PHY_CAPABILITIES TLVs
+     */
     A_UINT32 phy_id_map;
-    /* number of bits set in phy_id_map represents number of WMI_MAC_PHY_CAPABILITIES TLV's
-     * one for each active PHY for current HW mode identified by hw_mode_id. For example for
-     * DBS/SBS mode there will be 2 WMI_MAC_PHY_CAPABILITIES TLVs and for single MAC modes it
-     * will be 1 WMI_MAC_PHY_CAPABILITIES TLVs */
+    /**
+     * hw_mode_config_type
+     * Identify a particular type of HW mode such as SBS, DBS etc.
+     * Refer to WMI_HW_MODE_CONFIG_TYPE values.
+     */
+    A_UINT32 hw_mode_config_type;
 } WMI_HW_MODE_CAPABILITIES;
 
 typedef struct {
