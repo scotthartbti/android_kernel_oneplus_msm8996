@@ -1722,15 +1722,6 @@ typedef struct sSirSmeDeauthCnf
     tSirMacAddr        peerMacAddr;
 } tSirSmeDeauthCnf, *tpSirSmeDeauthCnf;
 
-/* Definition for disconnect done indication */
-typedef struct sSirSmeDisConDoneInd {
-   tANI_U16           messageType;
-   tANI_U16           length;
-   tANI_U8            sessionId;
-   tSirResultCodes    reasonCode;
-   tSirMacAddr        peerMacAddr;
-} tSirSmeDisConDoneInd, *tpSirSmeDisConDoneInd;
-
 /// Definition for stop BSS request message
 typedef struct sSirSmeStopBssReq
 {
@@ -4049,7 +4040,7 @@ typedef struct sSirTxPerTrackingParam
 #define    SIR_IPV4_ADDR_LEN                 4
 #define    SIR_MAC_ADDR_LEN                  6
 #define    SIR_MAX_FILTER_TEST_DATA_LEN       8
-#define    SIR_MAX_NUM_MULTICAST_ADDRESS    16
+#define    SIR_MAX_NUM_MULTICAST_ADDRESS    240
 #define    SIR_MAX_NUM_FILTERS               20
 #define    SIR_MAX_NUM_TESTS_PER_FILTER      10
 
@@ -4342,7 +4333,6 @@ typedef struct
     tANI_U16            transactionId; // Transaction ID for cmd
     tSirResultCodes        statusCode;
     tSirMacAddr            peerMac;
-    uint16_t            sta_idx;
 }tSirTdlsLinkEstablishReqRsp, *tpSirTdlsLinkEstablishReqRsp;
 
 /* TDLS Request struct SME-->PE */
@@ -4414,7 +4404,6 @@ typedef struct sSirActiveModeSetBcnFilterReq
    tANI_U16               messageType;
    tANI_U16               length;
    tANI_U8                seesionId;
-   tSirMacAddr            bssid;
 } tSirSetActiveModeSetBncFilterReq, *tpSirSetActiveModeSetBncFilterReq;
 
 //Reset AP Caps Changed
@@ -6772,23 +6761,6 @@ struct wow_pulse_mode {
 };
 
 /*
- * struct wakeup_gpio_mode
- * @host_wakeup_gpio: GPIO num used to wakeup host
- * @host_wakeup_type: Wakeup type for host. Refer to WMI_WAKE_GPIO_TYPE
- * @target_wakeup_gpio: GPIO num used to wakeup target
- * @target_wakeup_type: Wakeup type for target. Refer to WMI_WAKE_GPIO_TYPE
- *
- * SME uses this structure to configure wakeup gpio info
- * and send it to WMA
- */
-struct wakeup_gpio_mode {
-	uint32_t     host_wakeup_gpio;
-	uint32_t     host_wakeup_type;
-	uint32_t     target_wakeup_gpio;
-	uint32_t     target_wakeup_type;
-};
-
-/*
  * struct egap_params - the enhanced green ap params
  * @vdev_id: vdev id
  * @enable: enable or disable the enhance green ap in firmware
@@ -6805,7 +6777,6 @@ struct egap_conf_params {
 	uint32_t   flags;
 };
 
-#define SIR_BCN_FLT_MAX_ELEMS_IE_LIST 8
 /**
  * struct beacon_filter_param - parameters for beacon filtering
  * @vdev_id: vdev id
@@ -6814,7 +6785,7 @@ struct egap_conf_params {
  */
 struct beacon_filter_param {
 	uint32_t   vdev_id;
-	uint32_t   ie_map[SIR_BCN_FLT_MAX_ELEMS_IE_LIST];
+	uint32_t   ie_map[8];
 };
 
 /**

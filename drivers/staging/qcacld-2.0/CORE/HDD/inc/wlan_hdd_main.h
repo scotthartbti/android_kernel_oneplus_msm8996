@@ -78,6 +78,13 @@
 /** Length of the TX queue for the netdev */
 #define HDD_NETDEV_TX_QUEUE_LEN (3000)
 
+/** Bytes to reserve in the headroom */
+#if (!defined(QCA_WIFI_2_0)) || (defined(HIF_USB))
+#define HDD_HW_NEEDED_HEADROOM 128
+#else
+#define HDD_HW_NEEDED_HEADROOM 0
+#endif
+
 /** Hdd Tx Time out value */
 #ifdef LIBRA_LINUX_PC
 #define HDD_TX_TIMEOUT          (8000)
@@ -215,11 +222,7 @@
 
 /* Maximum number of interfaces allowed(STA, P2P Device, P2P Interfaces) */
 #ifndef WLAN_OPEN_P2P_INTERFACE
-#ifdef WLAN_4SAP_CONCURRENCY
-#define WLAN_MAX_INTERFACES 4
-#else
 #define WLAN_MAX_INTERFACES 3
-#endif
 #else
 #define WLAN_MAX_INTERFACES 4
 #endif
@@ -1841,10 +1844,6 @@ struct hdd_context_s
     uint8_t max_mc_addr_list;
     struct acs_dfs_policy acs_policy;
     uint8_t max_peers;
-    /* bit map to set/reset TDLS by different sources */
-    unsigned long tdls_source_bitmap;
-    /* tdls source timer to enable/disable TDLS on p2p listen */
-    vos_timer_t tdls_source_timer;
 };
 
 /*---------------------------------------------------------------------------
@@ -2252,5 +2251,4 @@ void hdd_sap_restart_handle(struct work_struct *work);
 void hdd_set_rps_cpu_mask(hdd_context_t *hdd_ctx);
 void hdd_initialize_adapter_common(hdd_adapter_t *adapter);
 void hdd_svc_fw_shutdown_ind(struct device *dev);
-void wlan_hdd_stop_enter_lowpower(hdd_context_t *hdd_ctx);
 #endif    // end #if !defined( WLAN_HDD_MAIN_H )

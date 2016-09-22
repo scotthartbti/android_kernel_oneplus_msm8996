@@ -71,6 +71,7 @@
 #include <linux/netdevice.h>
 #include <linux/mmc/sdio_func.h>
 #include "wlan_nlink_common.h"
+#include "wlan_btc_svc.h"
 #include "wlan_hdd_p2p.h"
 #ifdef IPA_OFFLOAD
 #include <wlan_hdd_ipa.h>
@@ -1451,6 +1452,9 @@ VOS_STATUS hdd_hostapd_SAPEventCB( tpSap_Event pSapEvent, v_PVOID_t usrDataForCa
             pHostapdState->bssState = BSS_START;
 
             hdd_wlan_green_ap_start_bss(pHddCtx);
+
+            // Send current operating channel of SoftAP to BTC-ES
+            send_btc_nlink_msg(WLAN_BTC_SOFTAP_BSS_START, 0);
 
             /* Set default key index */
             VOS_TRACE( VOS_MODULE_ID_HDD, VOS_TRACE_LEVEL_INFO,
@@ -3654,11 +3658,8 @@ static __iw_softap_getparam(struct net_device *dev,
         }
 
     case QCSAP_PARAM_AUTO_CHANNEL:
-        {
-            *value = (WLAN_HDD_GET_CTX
+        *value = (WLAN_HDD_GET_CTX
                       (pHostapdAdapter))->cfg_ini->force_sap_acs;
-            break;
-        }
 
     case QCSAP_PARAM_RTSCTS:
         {
@@ -6803,12 +6804,6 @@ hdd_adapter_t* hdd_wlan_create_ap_dev(hdd_context_t *pHddCtx,
          */
         hdd_set_needed_headroom(pWlanHostapdDev,
                            pWlanHostapdDev->hard_header_len);
-
-        if (pHddCtx->cfg_ini->enableIPChecksumOffload)
-            pWlanHostapdDev->features |= NETIF_F_HW_CSUM;
-        else if (pHddCtx->cfg_ini->enableTCPChkSumOffld)
-            pWlanHostapdDev->features |= NETIF_F_IP_CSUM | NETIF_F_IPV6_CSUM;
-        pWlanHostapdDev->features |= NETIF_F_RXCSUM;
 
         SET_NETDEV_DEV(pWlanHostapdDev, pHddCtx->parent_dev);
         spin_lock_init(&pHostapdAdapter->pause_map_lock);

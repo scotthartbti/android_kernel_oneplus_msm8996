@@ -413,9 +413,7 @@ limSendProbeReqMgmtFrame(tpAniSirGlobal pMac,
             if (p_ext_cap->interworkingService)
                 p_ext_cap->qosMap = 1;
 
-            extracted_ext_cap.num_bytes =
-                    lim_compute_ext_cap_ie_length(&extracted_ext_cap);
-            extracted_ext_cap_flag = (extracted_ext_cap.num_bytes > 0);
+            extracted_ext_cap_flag = lim_is_ext_cap_ie_present(p_ext_cap);
         }
     }
 
@@ -450,7 +448,7 @@ limSendProbeReqMgmtFrame(tpAniSirGlobal pMac,
 
     /* merge the ExtCap struct*/
     if (extracted_ext_cap_flag)
-        lim_merge_extcap_struct(&pr.ExtCap, &extracted_ext_cap, true);
+        lim_merge_extcap_struct(&pr.ExtCap, &extracted_ext_cap);
 
     // That done, pack the Probe Request:
     nStatus = dot11fPackProbeRequest( pMac, &pr, pFrame +
@@ -873,7 +871,7 @@ limSendProbeRspMgmtFrame(tpAniSirGlobal pMac,
     /*merge ExtCap IE*/
     if (extractedExtCapFlag)
     {
-        lim_merge_extcap_struct(&pFrm->ExtCap, &extractedExtCap, true);
+        lim_merge_extcap_struct(&pFrm->ExtCap, &extractedExtCap);
     }
     // That done, pack the Probe Response:
     nStatus = dot11fPackProbeResponse( pMac, pFrm, pFrame + sizeof(tSirMacMgmtHdr),
@@ -1512,7 +1510,7 @@ limSendAssocRspMgmtFrame(tpAniSirGlobal pMac,
     /* merge the ExtCap struct*/
     if (extractedExtCapFlag)
     {
-        lim_merge_extcap_struct(&(frm.ExtCap), &extractedExtCap, true);
+        lim_merge_extcap_struct(&(frm.ExtCap), &extractedExtCap);
     }
     nStatus = dot11fPackAssocResponse( pMac, &frm,
                                        pFrame + sizeof( tSirMacMgmtHdr ),
@@ -2057,11 +2055,6 @@ limSendAssocReqMgmtFrame(tpAniSirGlobal   pMac,
     tDot11fIEExtCap     extractedExtCap;
     tANI_BOOLEAN        extractedExtCapFlag = eANI_BOOLEAN_TRUE;
     tpSirMacMgmtHdr     pMacHdr;
-    tDot11fIEExtCap     ap_extcap;
-    tANI_U8            *ap_extcap_ptr = NULL;
-    tANI_U8            *pIe = NULL;
-    tANI_U32            ieLen = 0;
-    tANI_U32            fixed_param_len = 0;
 
     if(NULL == psessionEntry)
     {
@@ -2107,10 +2100,7 @@ limSendAssocReqMgmtFrame(tpAniSirGlobal   pMac,
                                           extractedExtCap.bytes;
             if (p_ext_cap->interworkingService)
                 p_ext_cap->qosMap = 1;
-
-            extractedExtCap.num_bytes =
-                    lim_compute_ext_cap_ie_length(&extractedExtCap);
-            extractedExtCapFlag = (extractedExtCap.num_bytes > 0);
+            extractedExtCapFlag = lim_is_ext_cap_ie_present(p_ext_cap);
         }
     } else {
         limLog(pMac, LOG1,
@@ -2380,28 +2370,7 @@ limSendAssocReqMgmtFrame(tpAniSirGlobal   pMac,
     /* merge the ExtCap struct*/
     if (extractedExtCapFlag)
     {
-        lim_merge_extcap_struct(&pFrm->ExtCap, &extractedExtCap, true);
-    }
-
-    /* Clear the bits in EXTCAP IE if AP not advertise it in beacon */
-    if (pFrm->ExtCap.present && psessionEntry->is_ext_caps_present)
-    {
-        fixed_param_len = DOT11F_FF_TIMESTAMP_LEN +
-                          DOT11F_FF_BEACONINTERVAL_LEN +
-                          DOT11F_FF_CAPABILITIES_LEN;
-        vos_mem_zero((tANI_U8*)&ap_extcap, sizeof(tDot11fIEExtCap));
-        if (psessionEntry->beacon && psessionEntry->bcnLen > fixed_param_len)
-        {
-            pIe = psessionEntry->beacon + fixed_param_len;
-            ieLen = psessionEntry->bcnLen - fixed_param_len;
-
-            /* Extract EXTCAP IE from beacon frame */
-            ap_extcap_ptr = lim_get_ie_ptr(pIe, ieLen, DOT11F_EID_EXTCAP);
-            lim_update_extcap_struct(pMac, ap_extcap_ptr, &ap_extcap);
-
-            /* Clear the bits if AP not advertise it in beacon */
-            lim_merge_extcap_struct(&pFrm->ExtCap, &ap_extcap, false);
-        }
+        lim_merge_extcap_struct(&pFrm->ExtCap, &extractedExtCap);
     }
 
     // That done, pack the Assoc Request:
@@ -2988,16 +2957,6 @@ void limSendRetryReassocReqFrame(tpAniSirGlobal     pMac,
 {
     tLimMlmReassocCnf       mlmReassocCnf; // keep sme
     tLimMlmReassocReq       *pTmpMlmReassocReq = NULL;
-#ifdef FEATURE_WLAN_ESE
-    tANI_U32                val=0;
-#endif
-    if (pMlmReassocReq == NULL)
-    {
-	    limLog(pMac, LOGE,
-			    FL("Invalid pMlmReassocReq"));
-	    goto end;
-    }
-
     if(NULL == pTmpMlmReassocReq)
     {
         pTmpMlmReassocReq = vos_mem_malloc(sizeof(tLimMlmReassocReq));
@@ -3008,31 +2967,6 @@ void limSendRetryReassocReqFrame(tpAniSirGlobal     pMac,
 
     // Prepare and send Reassociation request frame
     // start reassoc timer.
-#ifdef FEATURE_WLAN_ESE
-    /*
-     * In case of Ese Reassociation, change the reassoc timer
-     * value.
-     */
-    val = pMlmReassocReq->reassocFailureTimeout;
-    if (psessionEntry->isESEconnection)
-    {
-        val = val/LIM_MAX_REASSOC_RETRY_LIMIT;
-    }
-    if (tx_timer_deactivate(&pMac->lim.limTimers.gLimReassocFailureTimer) !=
-                            TX_SUCCESS)
-    {
-        limLog(pMac, LOGP,
-               FL("unable to deactivate Reassoc failure timer"));
-    }
-    val = SYS_MS_TO_TICKS(val);
-    if (tx_timer_change(&pMac->lim.limTimers.gLimReassocFailureTimer,
-                       val, 0) != TX_SUCCESS)
-    {
-        limLog(pMac, LOGP,
-               FL("unable to change Reassociation failure timer"));
-    }
-#endif
-
     pMac->lim.limTimers.gLimReassocFailureTimer.sessionId = psessionEntry->peSessionId;
     // Start reassociation failure timer
     MTRACE(vos_trace(VOS_MODULE_ID_PE, TRACE_CODE_TIMER_ACTIVATE,

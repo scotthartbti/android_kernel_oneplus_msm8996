@@ -747,12 +747,6 @@ __adf_nbuf_data_get_icmpv6_subtype(uint8_t *data)
 	case ICMPV6_RESPONSE:
 		proto_subtype = ADF_PROTO_ICMPV6_RES;
 		break;
-	case ICMPV6_NS:
-		proto_subtype = ADF_PROTO_ICMPV6_NS;
-		break;
-	case ICMPV6_NA:
-		proto_subtype = ADF_PROTO_ICMPV6_NA;
-		break;
 	default:
 		break;
 	}
@@ -804,10 +798,11 @@ __adf_nbuf_data_get_ipv6_proto(uint8_t *data)
  *
  * This func. checks whether it is a DHCP packet or not.
  *
- * Return: TRUE if it is a DHCP packet
- *         FALSE if not
+ * Return: A_STATUS_OK if it is a DHCP packet
+ *         A_STATUS_FAILED if not
  */
-bool __adf_nbuf_data_is_dhcp_pkt(uint8_t *data)
+a_status_t
+__adf_nbuf_data_is_dhcp_pkt(uint8_t *data)
 {
    a_uint16_t    SPort;
    a_uint16_t    DPort;
@@ -822,11 +817,11 @@ bool __adf_nbuf_data_is_dhcp_pkt(uint8_t *data)
        ((ADF_NBUF_TRAC_DHCP_CLI_PORT == adf_os_cpu_to_be16(SPort)) &&
        (ADF_NBUF_TRAC_DHCP_SRV_PORT == adf_os_cpu_to_be16(DPort))))
     {
-        return true;
+        return A_STATUS_OK;
     }
     else
     {
-        return false;
+        return A_STATUS_FAILED;
     }
 }
 
@@ -836,10 +831,11 @@ bool __adf_nbuf_data_is_dhcp_pkt(uint8_t *data)
  *
  * This func. checks whether it is a EAPOL packet or not.
  *
- * Return: TRUE if it is a EAPOL packet
- *         FALSE if not
+ * Return: A_STATUS_OK if it is a EAPOL packet
+ *         A_STATUS_FAILED if not
  */
-bool __adf_nbuf_data_is_eapol_pkt(uint8_t *data)
+a_status_t
+__adf_nbuf_data_is_eapol_pkt(uint8_t *data)
 {
     a_uint16_t    ether_type;
 
@@ -847,11 +843,11 @@ bool __adf_nbuf_data_is_eapol_pkt(uint8_t *data)
 			ADF_NBUF_TRAC_ETH_TYPE_OFFSET));
     if (ADF_NBUF_TRAC_EAPOL_ETH_TYPE == adf_os_cpu_to_be16(ether_type))
     {
-        return true;
+        return A_STATUS_OK;
     }
     else
     {
-        return false;
+        return A_STATUS_FAILED;
     }
 }
 
@@ -1152,33 +1148,22 @@ __adf_nbuf_trace_update(struct sk_buff *buf, char *event_string)
                    NBUF_PKT_TRAC_MAX_STRING);
    adf_os_mem_copy(string_buf,
                    event_string, adf_os_str_len(event_string));
-   switch (adf_nbuf_trace_get_proto_type(buf)) {
-   case NBUF_PKT_TRAC_TYPE_EAPOL:
+   if (NBUF_PKT_TRAC_TYPE_EAPOL &
+       adf_nbuf_trace_get_proto_type(buf)) {
       adf_os_mem_copy(string_buf + adf_os_str_len(event_string),
-                      "EPL", adf_os_str_len("EPL"));
-      break;
-   case NBUF_PKT_TRAC_TYPE_DHCP:
+                      "EPL",
+                      NBUF_PKT_TRAC_PROTO_STRING);
+   }
+   else if (NBUF_PKT_TRAC_TYPE_DHCP &
+            adf_nbuf_trace_get_proto_type(buf)) {
       adf_os_mem_copy(string_buf + adf_os_str_len(event_string),
-                      "DHC", adf_os_str_len("DHC"));
-      break;
-   case NBUF_PKT_TRAC_TYPE_MGMT_ACTION:
+                      "DHC",
+                      NBUF_PKT_TRAC_PROTO_STRING);
+   } else if (NBUF_PKT_TRAC_TYPE_MGMT_ACTION &
+              adf_nbuf_trace_get_proto_type(buf)) {
       adf_os_mem_copy(string_buf + adf_os_str_len(event_string),
-                      "MACT", adf_os_str_len("MACT"));
-      break;
-   case NBUF_PKT_TRAC_TYPE_ARP:
-      adf_os_mem_copy(string_buf + adf_os_str_len(event_string),
-                      "ARP", adf_os_str_len("ARP"));
-      break;
-   case NBUF_PKT_TRAC_TYPE_NS:
-      adf_os_mem_copy(string_buf + adf_os_str_len(event_string),
-                      "NS", adf_os_str_len("NS"));
-      break;
-   case NBUF_PKT_TRAC_TYPE_NA:
-      adf_os_mem_copy(string_buf + adf_os_str_len(event_string),
-                      "NA", adf_os_str_len("NA"));
-      break;
-   default:
-      break;
+                      "MACT",
+                      NBUF_PKT_TRAC_PROTO_STRING);
    }
 
    trace_update_cb(string_buf);
