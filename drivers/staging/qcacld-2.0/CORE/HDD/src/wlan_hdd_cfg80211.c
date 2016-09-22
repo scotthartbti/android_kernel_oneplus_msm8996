@@ -14279,32 +14279,34 @@ static int wlan_hdd_cfg80211_start_bss(hdd_adapter_t *pHostapdAdapter,
             acl_entry++;
         }
     }
-
-    pIe = wlan_hdd_cfg80211_get_ie_ptr(&pMgmt_frame->u.beacon.variable[0],
-            pBeacon->head_len, WLAN_EID_SUPP_RATES);
-    if (pIe != NULL) {
-        pIe++;
-        pConfig->supported_rates.numRates = pIe[0];
-        pIe++;
-        for (i = 0; i < pConfig->supported_rates.numRates; i++)
-            if (pIe[i]) {
-                pConfig->supported_rates.rate[i]= pIe[i];
-                hddLog(LOG1, FL("Configured Supported rate is %2x"),
-                        pConfig->supported_rates.rate[i]);
-            }
-    }
-    pIe = wlan_hdd_cfg80211_get_ie_ptr(pBeacon->tail, pBeacon->tail_len,
-            WLAN_EID_EXT_SUPP_RATES);
-    if (pIe != NULL) {
-        pIe++;
-        pConfig->extended_rates.numRates = pIe[0];
-        pIe++;
-        for (i = 0; i < pConfig->extended_rates.numRates; i++)
-            if (pIe[i]){
-                pConfig->extended_rates.rate[i]= pIe[i];
-                hddLog(LOG1, FL("Configured extended Supported rate is %2x"),
-                        pConfig->extended_rates.rate[i]);
-            }
+    if (!pHddCtx->cfg_ini->force_sap_acs) {
+        pIe = wlan_hdd_cfg80211_get_ie_ptr(&pMgmt_frame->u.beacon.variable[0],
+                pBeacon->head_len, WLAN_EID_SUPP_RATES);
+        if (pIe != NULL) {
+            pIe++;
+            pConfig->supported_rates.numRates = pIe[0];
+            pIe++;
+            for (i = 0; i < pConfig->supported_rates.numRates; i++)
+                if (pIe[i]) {
+                    pConfig->supported_rates.rate[i]= pIe[i];
+                    hddLog(LOG1, FL("Configured Supported rate is %2x"),
+                            pConfig->supported_rates.rate[i]);
+                }
+        }
+        pIe = wlan_hdd_cfg80211_get_ie_ptr(pBeacon->tail, pBeacon->tail_len,
+                WLAN_EID_EXT_SUPP_RATES);
+        if (pIe != NULL) {
+            pIe++;
+            pConfig->extended_rates.numRates = pIe[0];
+            pIe++;
+            for (i = 0; i < pConfig->extended_rates.numRates; i++)
+                if (pIe[i]) {
+                    pConfig->extended_rates.rate[i]= pIe[i];
+                    hddLog(LOG1,
+                            FL("Configured extended Supported rate is %2x"),
+                            pConfig->extended_rates.rate[i]);
+                }
+        }
     }
 
     wlan_hdd_set_sapHwmode(pHostapdAdapter);
@@ -21059,10 +21061,10 @@ static int __wlan_hdd_cfg80211_get_station(struct wiphy *wiphy,
        pAdapter->hdd_stats.summary_stat.tx_frm_cnt[3];
 
     sinfo->tx_retries =
-       pAdapter->hdd_stats.summary_stat.retry_cnt[0] +
-       pAdapter->hdd_stats.summary_stat.retry_cnt[1] +
-       pAdapter->hdd_stats.summary_stat.retry_cnt[2] +
-       pAdapter->hdd_stats.summary_stat.retry_cnt[3];
+       pAdapter->hdd_stats.summary_stat.multiple_retry_cnt[0] +
+       pAdapter->hdd_stats.summary_stat.multiple_retry_cnt[1] +
+       pAdapter->hdd_stats.summary_stat.multiple_retry_cnt[2] +
+       pAdapter->hdd_stats.summary_stat.multiple_retry_cnt[3];
 
     sinfo->tx_failed =
        pAdapter->hdd_stats.summary_stat.fail_cnt[0] +

@@ -16179,19 +16179,12 @@ static void wma_add_bss(tp_wma_handle wma, tpAddBssParams params)
 
 	switch(params->halPersona) {
 
-        case VOS_STA_SAP_MODE:
-		/*If current bring up SAP channel matches the previous
-		 *radar found channel then reset the last_radar_found_chan
-		 *variable to avoid race conditions.
-		 */
-		if (params->currentOperChannel ==
-			wma->dfs_ic->last_radar_found_chan)
-			wma->dfs_ic->last_radar_found_chan = 0;
-        case VOS_P2P_GO_MODE:
-		/*If current bring up P2P channel matches the previous
-		 *radar found channel then reset the last_radar_found_chan
-		 *variable to avoid race conditions.
-		 */
+	/*If current bring up SAP or P2P channel matches the previous
+	 *radar found channel then reset the last_radar_found_chan
+	 *variable to avoid race conditions.
+	 */
+	case VOS_STA_SAP_MODE:
+	case VOS_P2P_GO_MODE:
 		if (params->currentOperChannel ==
 				wma->dfs_ic->last_radar_found_chan)
 			wma->dfs_ic->last_radar_found_chan = 0;
@@ -27151,7 +27144,7 @@ static VOS_STATUS wma_process_ll_stats_getReq
 				WMI_SCAN_ADD_OFDM_RATES |
 				WMI_SCAN_ADD_SPOOFED_MAC_IN_PROBE_REQ |
 				WMI_SCAN_ADD_DS_IE_IN_PROBE_REQ;
-	cmd->scan_priority = WMI_SCAN_PRIORITY_HIGH;
+	cmd->scan_priority = WMI_SCAN_PRIORITY_VERY_LOW;
 	cmd->num_ssids = 0;
 	cmd->num_bssid = 0;
 	cmd->ie_len = 0;
