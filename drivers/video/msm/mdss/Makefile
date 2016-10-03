@@ -20,6 +20,7 @@ mdss-mdp-objs += mdss_mdp_cdm.o
 mdss-mdp-objs += mdss_smmu.o
 mdss-mdp-objs += mdss_mdp_wfd.o
 obj-$(CONFIG_FB_MSM_MDSS) += mdss-mdp.o
+obj-$(CONFIG_FB_MSM_MDSS) += mdss_mdp_debug.o
 
 ifeq ($(CONFIG_ARCH_MSM8996),y)
 mdss-mdp-objs += mdss_mdp_pp_v1_7.o
@@ -31,7 +32,6 @@ endif
 
 ifeq ($(CONFIG_FB_MSM_MDSS),y)
 obj-$(CONFIG_DEBUG_FS) += mdss_debug.o mdss_debug_xlog.o
-obj-$(CONFIG_DEBUG_FS) += mdss_mdp_debug.o
 obj-$(CONFIG_DEBUG_FS) += mdss_debug_frc.o
 endif
 
