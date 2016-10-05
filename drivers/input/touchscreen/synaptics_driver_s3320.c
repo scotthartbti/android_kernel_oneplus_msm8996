@@ -521,7 +521,7 @@ static void touch_disable(struct synaptics_ts_data *ts)
 
 static int tpd_hw_pwron(struct synaptics_ts_data *ts)
 {
-	int rc = 0;
+	int rc;
 
 	/***enable the 2v8 power*****/
 	if (!IS_ERR(ts->vdd_2v8)) {
@@ -1745,7 +1745,7 @@ static ssize_t synap_write_address(struct file *file, const char __user *buffer,
     }
     else
         block = temp_block;
-    return count;
+	return count;
 }
 
 #ifdef SUPPORT_GLOVES_MODE
@@ -3722,8 +3722,8 @@ static int synaptics_ts_probe(struct i2c_client *client, const struct i2c_device
 	TP_FW = CURRENT_FIRMWARE_ID;
 	sprintf(ts->fw_id,"0x%x",TP_FW);
 
-	memset(ts->fw_name, 0, TP_FW_NAME_MAX_LEN);
-	memset(ts->test_limit_name, 0, TP_FW_NAME_MAX_LEN);
+	memset(ts->fw_name,TP_FW_NAME_MAX_LEN,0);
+	memset(ts->test_limit_name,TP_FW_NAME_MAX_LEN,0);
 
 	//sprintf(ts->manu_name, "TP_SYNAPTICS");
     synaptics_rmi4_i2c_read_block(ts->client, F01_RMI_QUERY11,\

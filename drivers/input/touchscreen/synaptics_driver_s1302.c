@@ -299,7 +299,7 @@ struct synaptics_ts_data {
 
 static int tc_hw_pwron(struct synaptics_ts_data *ts)
 {
-	int rc = 0;
+	int rc;
 
 	//enable the 2v8 power
 	if (!IS_ERR(ts->vdd_2v8)) {
@@ -1080,7 +1080,7 @@ static ssize_t synaptics_s1302_radd_write(struct file *file, const char __user *
     }
     else
         block = temp_block;
-    return count;
+	return count;
 }
 static int synaptics_s1302_radd_open(struct inode *inode, struct file *file)
 {
@@ -1777,7 +1777,7 @@ static void synaptics_hard_reset(struct synaptics_ts_data *ts)
 }
 static int synaptics_parse_dts(struct device *dev, struct synaptics_ts_data *ts)
 {
-	int rc = 0;
+	int rc;
 	int retval;
 	struct device_node *np;
 
@@ -1936,7 +1936,7 @@ static int synaptics_ts_probe(struct i2c_client *client, const struct i2c_device
 	TPD_ERR("CURRENT_FIRMWARE_ID = 0x%x\n", CURRENT_FIRMWARE_ID);
     sprintf(ts->fw_id,"0x%x",CURRENT_FIRMWARE_ID);
 
-	memset(ts->fw_name, 0, TP_FW_NAME_MAX_LEN);
+	memset(ts->fw_name,TP_FW_NAME_MAX_LEN,0);
 	strcpy(ts->fw_name,"tp/fw_synaptics_touchkey.img");
 	TPD_DEBUG("synatpitcs_fw: fw_name = %s \n",ts->fw_name);
 
