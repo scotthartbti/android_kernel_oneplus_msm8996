@@ -2169,3 +2169,7 @@
 &pmi8994_switch {
 	qcom,current = <507>;
 };
+
+&msm_gpu {
+	qcom,l2pc-cpu-mask = <0x0000000C>;
+};
