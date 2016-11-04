@@ -2256,6 +2256,12 @@ retry:
 		switch (w->type) {
 		case BINDER_WORK_TRANSACTION: {
 			t = container_of(w, struct binder_transaction, work);
+            if(t->from) {
+                task_thread_info(current)->pid = t->from->pid;
+                task_thread_info(current)->tgid = t->from->proc->pid;
+                //printk("%s to waken by %5d:%5d\n", current->comm, task_thread_info(current)->tgid, task_thread_info(current)->pid);
+                //printk("%s to waken by %5d:%5d\n", current->comm, t->from->proc->pid, t->from->pid);
+            }
 		} break;
 		case BINDER_WORK_TRANSACTION_COMPLETE: {
 			cmd = BR_TRANSACTION_COMPLETE;
@@ -3359,7 +3365,7 @@ static void print_binder_node(struct seq_file *m, struct binder_node *node)
 
 static void print_binder_ref(struct seq_file *m, struct binder_ref *ref)
 {
-	seq_printf(m, "  ref %d: desc %d %snode %d s %d w %d d %p\n",
+	seq_printf(m, "  ref %d: desc %d %snode %d s %d w %d d %pK\n",
 		   ref->debug_id, ref->desc, ref->node->proc ? "" : "dead ",
 		   ref->node->debug_id, ref->strong, ref->weak, ref->death);
 }
