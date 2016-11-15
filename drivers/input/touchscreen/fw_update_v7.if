@@ -572,7 +572,7 @@ static void fwu_parse_partition_table(const unsigned char *partition_table,
 {
 	unsigned char ii;
 	unsigned char index;
-	unsigned char offset;
+	//unsigned char offset;
 	unsigned short partition_length;
 	unsigned short physical_address;
 	struct partition_table *ptable;
@@ -586,11 +586,13 @@ static void fwu_parse_partition_table(const unsigned char *partition_table,
 				ptable->start_physical_address_7_0;
 		TPD_DEBUG("%s: Partition entry %d:\n",
 				__func__, ii);
+/*
 		for (offset = 0; offset < 8; offset++) {
 			TPD_DEBUG("%s: 0x%02x\n",
 					__func__,
 					partition_table[index + offset]);
 		}
+*/
 		switch (ptable->partition_id) {
 		case CORE_CODE_PARTITION:
 			blkcount->ui_firmware = partition_length;
@@ -999,7 +1001,7 @@ static int fwu_write_f34_v7_partition_id(unsigned char cmd)
 {
 	int retval;
 	unsigned char base;
-	unsigned char partition = 0;
+	unsigned char partition;
 
 	base = fwu->f34_fd.data_base_addr;
 
