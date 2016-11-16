@@ -24618,9 +24618,11 @@ static VOS_STATUS wma_process_mcbc_set_filter_req(tp_wma_handle wma_handle,
 	if (mcbc_param->ulMulticastAddrCnt <= 0 ||
 		mcbc_param->ulMulticastAddrCnt >
 			CFG_TGT_MAX_MULTICAST_FILTER_ENTRIES) {
+#ifdef WMA_DEBUG_ALWAYS
 		WMA_LOGE("Number of multicast addresses: %u",
 				mcbc_param->ulMulticastAddrCnt);
 		WARN_ON(1);
+#endif
 		return VOS_STATUS_E_FAILURE;
 	}
 
