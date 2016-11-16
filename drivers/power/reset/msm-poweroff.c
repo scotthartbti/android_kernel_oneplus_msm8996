@@ -311,10 +311,8 @@ static void msm_restart_prepare(const char *cmd)
 				(cmd != NULL && cmd[0] != '\0'));
 	}
 
-#ifdef CONFIG_MACH_MSM8996_15801
 	/* To preserve console-ramoops */
 	need_warm_reset = true;
-#endif
 
 	/* Hard reset the PMIC unless memory contents must be maintained. */
 	if (need_warm_reset) {
@@ -323,13 +321,10 @@ static void msm_restart_prepare(const char *cmd)
 		qpnp_pon_system_pwr_off(PON_POWER_OFF_HARD_RESET);
 	}
 
-#ifdef CONFIG_MACH_MSM8996_15801
 	if (in_panic) {
 		qpnp_pon_set_restart_reason(PON_RESTART_REASON_REBOOT);
 		__raw_writel(0x77665501, restart_reason);
-	} else
-#endif
-	if (cmd != NULL) {
+	} else if (cmd != NULL) {
         if (!strncmp(cmd, "rf", 2)) {
             qpnp_pon_set_restart_reason(PON_RESTART_REASON_RF);
 	        __raw_writel(RF_MODE, restart_reason);
