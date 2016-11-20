@@ -6,6 +6,7 @@ list_files() {
 cat <<EOF
 bin/sdcard
 etc/wifi/WCNSS_qcom_cfg.ini
+vendor/firmware/qwlan30.bin
 EOF
 }
 
