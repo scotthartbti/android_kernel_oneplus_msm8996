@@ -53,8 +53,6 @@ Module.symvers
 !/ramdisk/**
 !/recovery/**
 
-!/kernelzip/**
-
 #
 # Debian directory (make deb-pkg)
 #
