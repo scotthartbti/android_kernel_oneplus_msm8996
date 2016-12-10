@@ -4062,8 +4062,6 @@ static int synaptics_i2c_resume(struct device *dev)
 {
 	struct synaptics_ts_data *ts = dev_get_drvdata(dev);
 
-	complete(&ts->i2c_resume);
-
 	TPD_DEBUG("%s is called\n", __func__);
     queue_delayed_work(synaptics_wq,&ts->speed_up_work, msecs_to_jiffies(5));
 	if (ts->gesture_enable == 1){
