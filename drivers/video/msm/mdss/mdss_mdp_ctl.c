@@ -321,12 +321,12 @@ static u32 mdss_mdp_perf_calc_pipe_prefill_video(struct mdss_mdp_prefill_params
 {
 	struct mdss_data_type *mdata = mdss_mdp_get_mdata();
 	struct mdss_prefill_data *prefill = &mdata->prefill_data;
-	u32 prefill_bytes;
-	u32 latency_buf_bytes;
+	u32 prefill_bytes = 0;
+	u32 latency_buf_bytes = 0;
 	u32 y_buf_bytes = 0;
 	u32 y_scaler_bytes = 0;
 	u32 pp_bytes = 0, pp_lines = 0;
-	u32 post_scaler_bytes;
+	u32 post_scaler_bytes = 0;
 	u32 fbc_bytes = 0;
 
 	prefill_bytes = prefill->ot_bytes;
@@ -1526,7 +1526,7 @@ int mdss_mdp_perf_bw_check_pipe(struct mdss_mdp_perf_params *perf,
 {
 	struct mdss_data_type *mdata = pipe->mixer_left->ctl->mdata;
 	struct mdss_mdp_ctl *ctl = pipe->mixer_left->ctl;
-	u32 vbp_fac, threshold;
+	u32 vbp_fac = 0, threshold = 0;
 	u64 prefill_bw, pipe_bw, max_pipe_bw;
 
 	/* we only need bandwidth check on real-time clients (interfaces) */
@@ -2401,7 +2401,8 @@ int mdss_mdp_display_wakeup_time(struct mdss_mdp_ctl *ctl,
 				 ktime_t *wakeup_time)
 {
 	struct mdss_panel_info *pinfo;
-	u32 clk_rate, clk_period;
+	u64 clk_rate;
+	u32 clk_period;
 	u32 current_line, total_line;
 	u32 time_of_line, time_to_vsync, adjust_line_ns;
 
@@ -2416,7 +2417,7 @@ int mdss_mdp_display_wakeup_time(struct mdss_mdp_ctl *ctl,
 
 	clk_rate = mdss_mdp_get_pclk_rate(ctl);
 
-	clk_rate /= 1000;	/* in kHz */
+	clk_rate = DIV_ROUND_UP_ULL(clk_rate, 1000); /* in kHz */
 	if (!clk_rate)
 		return -EINVAL;
 
@@ -2425,7 +2426,7 @@ int mdss_mdp_display_wakeup_time(struct mdss_mdp_ctl *ctl,
 	 * accuracy with high pclk rate and this number is in 17 bit
 	 * range.
 	 */
-	clk_period = 1000000000 / clk_rate;
+	clk_period = DIV_ROUND_UP_ULL(1000000000, clk_rate);
 	if (!clk_period)
 		return -EINVAL;
 
@@ -2464,7 +2465,7 @@ int mdss_mdp_display_wakeup_time(struct mdss_mdp_ctl *ctl,
 
 	*wakeup_time = ktime_add_ns(current_time, time_to_vsync);
 
-	pr_debug("clk_rate=%dkHz clk_period=%d cur_line=%d tot_line=%d\n",
+	pr_debug("clk_rate=%lldkHz clk_period=%d cur_line=%d tot_line=%d\n",
 		clk_rate, clk_period, current_line, total_line);
 	pr_debug("time_to_vsync=%d current_time=%d wakeup_time=%d\n",
 		time_to_vsync, (int)ktime_to_ms(current_time),
@@ -4111,10 +4112,11 @@ void mdss_mdp_set_roi(struct mdss_mdp_ctl *ctl,
 	    (!l_roi->w && !l_roi->h && !r_roi->w && !r_roi->h) ||
 	    !ctl->panel_data->panel_info.partial_update_enabled) {
 
-		if (ctl->mixer_left)
+		if (ctl->mixer_left) {
 			*l_roi = (struct mdss_rect) {0, 0,
-				ctl->mixer_left->width,
-				ctl->mixer_left->height};
+					ctl->mixer_left->width,
+					ctl->mixer_left->height};
+		}
 
 		if (ctl->mixer_right)
 			*r_roi = (struct mdss_rect) {0, 0,
@@ -4133,7 +4135,8 @@ void mdss_mdp_set_roi(struct mdss_mdp_ctl *ctl,
 
 		if (sctl && sctl->mixer_left) {
 			mdss_mdp_set_mixer_roi(sctl->mixer_left, r_roi);
-			sctl->roi = sctl->mixer_left->roi;
+			if (sctl->mixer_left)
+				sctl->roi = sctl->mixer_left->roi;
 		}
 	} else if (is_dual_lm_single_display(ctl->mfd) && ctl->mixer_right) {
 
@@ -4651,14 +4654,14 @@ int mdss_mdp_get_pipe_flush_bits(struct mdss_mdp_pipe *pipe)
 	u32 flush_bits;
 
 	if (pipe->type == MDSS_MDP_PIPE_TYPE_DMA)
-		flush_bits = BIT(pipe->num) << 5;
+		flush_bits |= BIT(pipe->num) << 5;
 	else if (pipe->num == MDSS_MDP_SSPP_VIG3 ||
 			pipe->num == MDSS_MDP_SSPP_RGB3)
-		flush_bits = BIT(pipe->num) << 10;
+		flush_bits |= BIT(pipe->num) << 10;
 	else if (pipe->type == MDSS_MDP_PIPE_TYPE_CURSOR)
-		flush_bits = BIT(22 + pipe->num - MDSS_MDP_SSPP_CURSOR0);
+		flush_bits |= BIT(22 + pipe->num - MDSS_MDP_SSPP_CURSOR0);
 	else /* RGB/VIG 0-2 pipes */
-		flush_bits = BIT(pipe->num);
+		flush_bits |= BIT(pipe->num);
 
 	return flush_bits;
 }
