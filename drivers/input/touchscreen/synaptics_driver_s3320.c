@@ -33,8 +33,6 @@
 #include <linux/pinctrl/pinctrl.h>
 #include <linux/pinctrl/machine.h>
 
-#include <linux/qdsp6v2/apr.h>
-
 #include <linux/kthread.h>
 #include <linux/random.h>
 #include <linux/slab.h>
@@ -1242,7 +1240,7 @@ static void gesture_judge(struct synaptics_ts_data *ts)
         ||(gesture == LeftVee && LeftVee_gesture)||(gesture == UpVee && UpVee_gesture)\
         ||(gesture == Circle && Circle_gesture)||(gesture == DouSwip && DouSwip_gesture)){
 		gesture_upload = gesture;
-		if (!ts->gestures_disabled || !q6voice_voice_call_active()) {
+		if (!ts->gestures_disabled) {
 			input_report_key(ts->input_dev, keyCode, 1);
 			input_sync(ts->input_dev);
 			input_report_key(ts->input_dev, keyCode, 0);
