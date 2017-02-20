@@ -1854,8 +1854,7 @@ static void file_free_work_handler(struct work_struct *w)
 			break;
 		}
 		mutex_unlock(&me->flfree_mutex);
-		if (freefl)
-			fastrpc_file_free(freefl->fl);
+		fastrpc_file_free(freefl->fl);
 		mutex_lock(&me->flfree_mutex);
 
 		if (hlist_empty(&me->fls)) {
